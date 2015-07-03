@@ -1,4 +1,4 @@
-package mpowergo
+package mpower
 
 import (
 	"bytes"
@@ -69,7 +69,7 @@ func (on *OnsiteInvoice) Create(name string) (bool, error) {
 	if content, err := json.Marshal(on); err != nil {
 		panic("Error encoding json")
 	} else {
-		req.Send(content)
+		req.Send(bytes.NewBuffer(content).String())
 	}
 
 	if resp, body, err := req.End(); err != nil {
@@ -80,9 +80,9 @@ func (on *OnsiteInvoice) Create(name string) (bool, error) {
 			panic("Error decoding json")
 		}
 
+		on.ResponseText = respJson.ResponseText
+		on.ResponseCode = respJson.ResponseCode
 		if respJson.ResponseCode == "00" {
-			on.ResponseText = respJson.ResponseText
-			on.ResponseCode = respJson.ResponseCode
 			on.Description = respJson.Description
 			on.Token = respJson.Token
 			on.InvoiceToken = respJson.InvoiceToken
@@ -106,7 +106,7 @@ func (on *OnsiteInvoice) Charge(oprToken, confirmToken string) (bool, error) {
 	if dataByte, err := json.Marshal(data); err != nil {
 		panic("Error encoding struct data")
 	} else {
-		if _, body, err := req.Send(dataByte).End(); err != nil {
+		if _, body, err := req.Send(bytes.NewBuffer(dataByte).String()).End(); err != nil {
 			return false, fmt.Errorf("%v", err)
 		} else {
 			if err := json.Unmarshal(bytes.NewBufferString(body).Bytes(), &respData); err != nil {
@@ -127,8 +127,8 @@ func (on *OnsiteInvoice) Charge(oprToken, confirmToken string) (bool, error) {
 	}
 }
 
-func CreateOnsiteInvoice(setup Setup, store Store) *OnsiteInvoice {
-	onsiteInvoiceIns := &OnsiteInvoice{Invoice: Invoice{Setup: &setup, Store: store}}
+func CreateOnsiteInvoice(setup *Setup, store *Store) *OnsiteInvoice {
+	onsiteInvoiceIns := &OnsiteInvoice{Invoice: Invoice{Setup: setup, Store: *store}}
 	onsiteInvoiceIns.baseUrl = onsiteInvoiceIns.Invoice.Setup.BASE_URL + "/opr"
 	return onsiteInvoiceIns
 }

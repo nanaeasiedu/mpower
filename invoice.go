@@ -1,7 +1,7 @@
-package mpowergo
+package mpower
 
 import (
-	"strconv"
+	"fmt"
 )
 
 type item struct {
@@ -21,26 +21,46 @@ type invoice struct {
 	itemsLen    int               `json:"-"`
 	taxesLen    int               `json:"-"`
 	Items       map[string]item   `json:"items"`
-	Taxes       map[string]tax    `json:"taxes"`
+	Taxes       map[string]tax    `json:"taxes,omitempty"`
 	TotalAmount float32           `json:"total_amount"`
 	Description string            `json:"description"`
-	Actions     map[string]string `json:"actions"`
+	Actions     map[string]string `json:"actions,omitempty"`
 }
 
 type Invoice struct {
 	Setup      *Setup                 `json:"-"`
 	Store      Store                  `json:"store"`
 	InvoiceIn  invoice                `json:"invoice"`
-	CustomData map[string]interface{} `json:"custom_data"`
+	CustomData map[string]interface{} `json:"custom_data,omitempty"`
 }
 
 func (i *Invoice) AddItem(name string, quantity int, unitPrice float32, totalPrice float32, desc string) {
-	i.InvoiceIn.Items["item_"+strconv.Itoa(i.InvoiceIn.itemsLen)] = item{name, quantity, unitPrice, totalPrice, desc}
+	// check golang issue#3117 https://code.google.com/p/go/issues/detail?id=3117
+	if i.InvoiceIn.itemsLen == 0 {
+		i.InvoiceIn.Items = make(map[string]item)
+	}
+	itemName := "item_" + fmt.Sprintf("%d", i.InvoiceIn.itemsLen)
+	i.InvoiceIn.Items[itemName] = item{}
+	tempItem := i.InvoiceIn.Items[itemName]
+	tempItem.Name = name
+	tempItem.Quantity = quantity
+	tempItem.UnitPrice = unitPrice
+	tempItem.TotalPrice = totalPrice
+	tempItem.Description = desc
+	i.InvoiceIn.Items[itemName] = tempItem
 	i.InvoiceIn.itemsLen += 1
 }
 
 func (i *Invoice) AddTax(name string, amount float32) {
-	i.InvoiceIn.Taxes["tax_"+strconv.Itoa(i.InvoiceIn.taxesLen)] = tax{name, amount}
+	if i.InvoiceIn.taxesLen == 0 {
+		i.InvoiceIn.Taxes = make(map[string]tax)
+	}
+	taxName := "tax_" + fmt.Sprintf("%d", i.InvoiceIn.taxesLen)
+	i.InvoiceIn.Taxes[taxName] = tax{}
+	tempTax := i.InvoiceIn.Taxes[taxName]
+	tempTax.Name = name
+	tempTax.Amount = amount
+	i.InvoiceIn.Taxes[taxName] = tempTax
 	i.InvoiceIn.taxesLen += 1
 }
 

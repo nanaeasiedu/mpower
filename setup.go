@@ -1,8 +1,8 @@
-package mpowergo
+package mpower
 
 const (
-	BASE_URL_LIVE string = "https://app.mpowerpayments.com/api/v1"
-	BASE_URL_TEST string = "https://app.mpowerpayments.com/sandbox-api/v1"
+	BASE_URL_LIVE = "https://app.mpowerpayments.com/api/v1"
+	BASE_URL_TEST = "https://app.mpowerpayments.com/sandbox-api/v1"
 )
 
 type Setup struct {
@@ -32,10 +32,10 @@ func (setup *Setup) GetHeaders() map[string]string {
 
 func NewSetup(setupInfo map[string]string) *Setup {
 	setup := &Setup{
-		MasterKey:   envOr("MP-Master-Key", setupInfo["MP-Master-Key"]),
-		PrivateKey:  envOr("MP-Private-Key", setupInfo["MP-PrivateKey"]),
-		PublicKey:   envOr("MP-Public-Key", setupInfo["MP-PublicKey"]),
-		Token:       envOr("MP-Token", setupInfo["MP-Token"]),
+		MasterKey:   envOr("MP-Master-Key", setupInfo["masterKey"]),
+		PrivateKey:  envOr("MP-Private-Key", setupInfo["privateKey"]),
+		PublicKey:   envOr("MP-Public-Key", setupInfo["publicKey"]),
+		Token:       envOr("MP-Token", setupInfo["token"]),
 		ContentType: "application/json",
 	}
 

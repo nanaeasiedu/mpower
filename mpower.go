@@ -1,4 +1,4 @@
-package mpowergo
+package mpower
 
 import (
 	"os"

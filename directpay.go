@@ -1,4 +1,4 @@
-package mpowergo
+package mpower
 
 import (
 	"bytes"
@@ -33,6 +33,7 @@ func (d *DirectPay) CreditAccount(account string, amount int) (bool, error) {
 	dataToSend := payData{account, amount}
 	req := gorequest.New()
 
+	req.Post(d.baseUrl + "/credit-account")
 	var dataToRecv directPayReponse
 
 	for key, val := range d.Setup.GetHeaders() {
@@ -42,7 +43,7 @@ func (d *DirectPay) CreditAccount(account string, amount int) (bool, error) {
 	if content, err := json.Marshal(dataToSend); err != nil {
 		return false, err
 	} else {
-		req.Send(content)
+		req.Send(bytes.NewBuffer(content).String())
 	}
 
 	if resp, body, err := req.End(); err != nil {
@@ -70,7 +71,7 @@ func (d *DirectPay) CreditAccount(account string, amount int) (bool, error) {
 
 func NewDirectPay(setup Setup) *DirectPay {
 	directIns := &DirectPay{Setup: &setup}
-	directIns.baseUrl = directIns.Setup.BASE_URL + "/credit-account"
+	directIns.baseUrl = directIns.Setup.BASE_URL + "/direct-pay"
 
 	return directIns
 }

@@ -1,15 +1,15 @@
-package mpowergo
+package mpower
 
 import (
 	"errors"
 )
 
 type Store struct {
-	Name          string
-	Tagline       string
-	PhoneNumber   string
-	PostalAddress string
-	LogoUrl       string
+	Name          string `json:"name"`
+	Tagline       string `json:"tagline"`
+	PhoneNumber   string `json:"phone"`
+	PostalAddress string `json:"postal_address"`
+	LogoURL       string `json:"logo_url"`
 }
 
 func (store *Store) Get(fieldName string) string {
@@ -47,8 +47,8 @@ func NewStore(storeInfo interface{}) (error, *Store) {
 				store.PostalAddress = val
 			}
 
-			if val, ok = valueOfStore["logoUrl"]; ok {
-				store.LogoUrl = val
+			if val, ok = valueOfStore["logoURL"]; ok {
+				store.LogoURL = val
 			}
 		}
 	}

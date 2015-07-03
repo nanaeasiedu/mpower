@@ -1,4 +1,4 @@
-package mpowergo
+package mpower
 
 import (
 	"bytes"
@@ -42,10 +42,11 @@ func (c *CheckoutInvoice) Create() (bool, error) {
 	if content, err := json.Marshal(c.Invoice); err != nil {
 		panic("Error encoding json")
 	} else {
-		req.Send(content)
+		req.Send(bytes.NewBuffer(content).String())
 	}
 
 	if resp, body, err := req.End(); err != nil {
+		fmt.Errorf("%v", err)
 		c.Status = resp.Status
 		return false, fmt.Errorf("%v", err)
 	} else {
@@ -96,8 +97,8 @@ func (c *CheckoutInvoice) Confirm(token string) (string, error) {
 	}
 }
 
-func CreateCheckoutInvoice(setup Setup, store Store) *CheckoutInvoice {
-	checkoutInvoiceIns := &CheckoutInvoice{Invoice: Invoice{Setup: &setup, Store: store}}
+func CreateCheckoutInvoice(setup *Setup, store *Store) *CheckoutInvoice {
+	checkoutInvoiceIns := &CheckoutInvoice{Invoice: Invoice{Setup: setup, Store: *store}}
 	checkoutInvoiceIns.baseUrl = checkoutInvoiceIns.Invoice.Setup.BASE_URL + "/checkout-invoice"
 	return checkoutInvoiceIns
 }

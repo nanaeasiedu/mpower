@@ -1,0 +1,15 @@
+{
+	"ImportPath": "github.com/ngenerio/mpower",
+	"GoVersion": "go1.4.2",
+	"Deps": [
+		{
+			"ImportPath": "github.com/parnurzeal/gorequest",
+			"Comment": "v0.2.5-3-g19eed7d",
+			"Rev": "19eed7daff5653f5f753b3474f194b8f37c70463"
+		},
+		{
+			"ImportPath": "golang.org/x/net/publicsuffix",
+			"Rev": "d9558e5c97f85372afee28cf2b6059d7d3818919"
+		}
+	]
+}

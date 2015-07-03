@@ -90,6 +90,8 @@ if ok, err := checkout.Create(); ok {
 ```
 
 For onsite invoice
+
+```go
 if ok, err := checkout.Create("me"); ok {
   //do something with the response info on the checkout instance
   fmt.Printf("%s %s %s %s\n\n", checkout.ResponseCode, checkout.ResponseText, checkout.Description, checkout.Token)
@@ -98,10 +100,6 @@ if ok, err := checkout.Create("me"); ok {
 }
 ```
 
-Confirm the status of an invoice using the `token` of the invoice
-
-```go
-
 Get the invoice url of the recently created invoice with **`GetInvoiceUrl`**
 
 ```go
@@ -109,6 +107,7 @@ str := checkout.GetInvoiceUrl()
 ```
 
 For the onsite invoice, you have to charge the customer using the confirm token from **`Create`** and `token` from the user
+
 ```go
 if str, err := checkout.Confirm(token); err != nil {
     // handle error

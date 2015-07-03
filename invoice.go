@@ -46,7 +46,7 @@ type Invoice struct {
 // AddItem add an `item - struct` to the items in the invoice
 //
 // Example.
-//    checkout := mpower.CreateCheckoutInvoice(newSetup, newStore)
+//    checkout := mpower.NewCheckoutInvoice(newSetup, newStore)
 //    checkout.AddItem("Yam Phone", 1, 50.00, 50.00, "Hello World")
 func (i *Invoice) AddItem(name string, quantity int, unitPrice float32, totalPrice float32, desc string) {
 	// check golang issue#3117 https://code.google.com/p/go/issues/detail?id=3117
@@ -68,7 +68,7 @@ func (i *Invoice) AddItem(name string, quantity int, unitPrice float32, totalPri
 // AddItem add an `tax - struct` to the taxes in the invoice
 //
 // Example.
-//    checkout := mpower.CreateCheckoutInvoice(newSetup, newStore)
+//    checkout := mpower.NewCheckoutInvoice(newSetup, newStore)
 //    checkout.AddTax("VAT", 30.00)
 func (i *Invoice) AddTax(name string, amount float32) {
 	if i.InvoiceIn.taxesLen == 0 {
@@ -86,7 +86,7 @@ func (i *Invoice) AddTax(name string, amount float32) {
 // Sets the description for the invoice
 //
 // Example.
-//    checkout := mpower.CreateCheckoutInvoice(newSetup, newStore)
+//    checkout := mpower.NewCheckoutInvoice(newSetup, newStore)
 //    checkout.SetDescription("Hello World")
 func (i *Invoice) SetDescription(desc string) {
 	if desc == "" {
@@ -99,7 +99,7 @@ func (i *Invoice) SetDescription(desc string) {
 // Sets the total amount on the invoice
 //
 // Example.
-//    checkout := mpower.CreateCheckoutInvoice(newSetup, newStore)
+//    checkout := mpower.NewCheckoutInvoice(newSetup, newStore)
 //    checkout.SetTotalAmount(80.00)
 func (i *Invoice) SetTotalAmount(amt float32) {
 	if amt == 0 {
@@ -112,7 +112,7 @@ func (i *Invoice) SetTotalAmount(amt float32) {
 // Sets the total amount on the invoice
 //
 // Example.
-//    checkout := mpower.CreateCheckoutInvoice(newSetup, newStore)
+//    checkout := mpower.NewCheckoutInvoice(newSetup, newStore)
 //    checkout.SetCustomData("bonus", yeah)
 func (i *Invoice) SetCustomData(key string, val interface{}) {
 	i.CustomData[key] = val

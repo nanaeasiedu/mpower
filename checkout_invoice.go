@@ -102,7 +102,8 @@ func (c *CheckoutInvoice) Confirm(token string) (string, error) {
 		req.Set(key, val)
 	}
 
-	if _, body, err := req.End(); err != nil {
+	if resp, body, err := req.End(); err != nil {
+		c.Status = resp.Status
 		return "", fmt.Errorf("%v", err)
 	} else {
 		if err := json.Unmarshal(bytes.NewBufferString(body).Bytes(), &status); err != nil {

@@ -7,6 +7,8 @@ import (
 	"github.com/parnurzeal/gorequest"
 )
 
+// The onsite definition as defined by mpower documentation
+// This struct holds all the data with respect to onsite request
 type OnsiteInvoice struct {
 	Invoice `json:"invoice_data"`
 	OPRData struct {
@@ -55,6 +57,19 @@ type opr struct {
 	confirmToken string `json:"confirm_token"`
 }
 
+// Create - creates a bew invoice on mpowers server
+// Returns a `boolean` and `error`
+// The boolean signifies whether the inovoice was created on not
+// The response json object can be retrieved on the onsite invoice object created by the NewOnsiteInvoice
+//
+// Example.
+//
+//   ok, err := onsite.Create("hello")
+//      if ok {
+//         fmt.Printf("%s %s %s %s", onsite.ResponseCode, onsite.ResponseText, onsite.Description, onsite.Token)
+//      } else {
+//          fmt.Printf("%v", err)
+//      }
 func (on *OnsiteInvoice) Create(name string) (bool, error) {
 	var respJson responseJsonOnsite
 	req := gorequest.New()
@@ -94,6 +109,19 @@ func (on *OnsiteInvoice) Create(name string) (bool, error) {
 	}
 }
 
+// Charge - it charges the customer on mpower and returns a response json object which contains the receipt url with other information
+// The `confirmToken` is from the customer
+// Returns a `boolean` and `error`
+// The boolean signifies whether the customer was chargeed or not
+// The response json object can be retrieved on the onsite invoice object
+//
+// Example.
+//    if ok, err := onsite.Charge(onsite.Token, "4346"); ok {
+//      //doSomething
+//    } else {
+//
+//    }
+//
 func (on *OnsiteInvoice) Charge(oprToken, confirmToken string) (bool, error) {
 	var respData oprResponse
 	data := opr{oprToken, confirmToken}
@@ -113,9 +141,10 @@ func (on *OnsiteInvoice) Charge(oprToken, confirmToken string) (bool, error) {
 				panic("Error decoding json")
 			}
 
+			on.ResponseText = respData.ResponseText
+			on.ResponseCode = respData.ResponseCode
+
 			if respData.ResponseCode == "00" {
-				on.ResponseText = respData.ResponseText
-				on.ResponseCode = respData.ResponseCode
 				on.Description = respData.Description
 				on.Status = respData.InvoiceData.Status
 				on.ReceiptUrl = respData.InvoiceData.ReceiptUrl
@@ -127,7 +156,12 @@ func (on *OnsiteInvoice) Charge(oprToken, confirmToken string) (bool, error) {
 	}
 }
 
-func CreateOnsiteInvoice(setup *Setup, store *Store) *OnsiteInvoice {
+// NewOnsiteInvoice create a new onsite invoice object
+// It require a setup and store object
+//
+// Example.
+//    onsite := mpower.NewOnsiteInvoice(newSetup, newStore)
+func NewOnsiteInvoice(setup *Setup, store *Store) *OnsiteInvoice {
 	onsiteInvoiceIns := &OnsiteInvoice{Invoice: Invoice{Setup: setup, Store: *store}}
 	onsiteInvoiceIns.baseUrl = onsiteInvoiceIns.Invoice.Setup.BASE_URL + "/opr"
 	return onsiteInvoiceIns

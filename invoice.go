@@ -4,6 +4,8 @@ import (
 	"fmt"
 )
 
+// Item definition as specified by mpower docs
+// It holds the data of an item
 type item struct {
 	Name        string  `json:"name"`
 	Quantity    int     `json:"quantity"`
@@ -12,11 +14,15 @@ type item struct {
 	Description string  `json:"description"`
 }
 
+// Tax definition as specified by mpower docs
+// It holds the tax data
 type tax struct {
 	Name   string  `json:"name"`
 	Amount float32 `json:"amount"`
 }
 
+// Invoice definition as specified by mpower docs
+// It holds all the data related to the invoice
 type invoice struct {
 	itemsLen    int               `json:"-"`
 	taxesLen    int               `json:"-"`
@@ -27,6 +33,9 @@ type invoice struct {
 	Actions     map[string]string `json:"actions,omitempty"`
 }
 
+// The invoice definition
+// It specifies the required field keys and values we will be sending over to mpower
+// This is supposed to be an embedded struct in the Onsite Invoice and Checkout Invoice
 type Invoice struct {
 	Setup      *Setup                 `json:"-"`
 	Store      Store                  `json:"store"`
@@ -34,6 +43,11 @@ type Invoice struct {
 	CustomData map[string]interface{} `json:"custom_data,omitempty"`
 }
 
+// AddItem add an `item - struct` to the items in the invoice
+//
+// Example.
+//    checkout := mpower.CreateCheckoutInvoice(newSetup, newStore)
+//    checkout.AddItem("Yam Phone", 1, 50.00, 50.00, "Hello World")
 func (i *Invoice) AddItem(name string, quantity int, unitPrice float32, totalPrice float32, desc string) {
 	// check golang issue#3117 https://code.google.com/p/go/issues/detail?id=3117
 	if i.InvoiceIn.itemsLen == 0 {
@@ -51,6 +65,11 @@ func (i *Invoice) AddItem(name string, quantity int, unitPrice float32, totalPri
 	i.InvoiceIn.itemsLen += 1
 }
 
+// AddItem add an `tax - struct` to the taxes in the invoice
+//
+// Example.
+//    checkout := mpower.CreateCheckoutInvoice(newSetup, newStore)
+//    checkout.AddTax("VAT", 30.00)
 func (i *Invoice) AddTax(name string, amount float32) {
 	if i.InvoiceIn.taxesLen == 0 {
 		i.InvoiceIn.Taxes = make(map[string]tax)
@@ -64,6 +83,11 @@ func (i *Invoice) AddTax(name string, amount float32) {
 	i.InvoiceIn.taxesLen += 1
 }
 
+// Sets the description for the invoice
+//
+// Example.
+//    checkout := mpower.CreateCheckoutInvoice(newSetup, newStore)
+//    checkout.SetDescription("Hello World")
 func (i *Invoice) SetDescription(desc string) {
 	if desc == "" {
 		panic("provide the description argument")
@@ -72,6 +96,11 @@ func (i *Invoice) SetDescription(desc string) {
 	i.InvoiceIn.Description = desc
 }
 
+// Sets the total amount on the invoice
+//
+// Example.
+//    checkout := mpower.CreateCheckoutInvoice(newSetup, newStore)
+//    checkout.SetTotalAmount(80.00)
 func (i *Invoice) SetTotalAmount(amt float32) {
 	if amt == 0 {
 		panic("provide the totalAmount argument")
@@ -80,6 +109,11 @@ func (i *Invoice) SetTotalAmount(amt float32) {
 	i.InvoiceIn.TotalAmount = amt
 }
 
+// Sets the total amount on the invoice
+//
+// Example.
+//    checkout := mpower.CreateCheckoutInvoice(newSetup, newStore)
+//    checkout.SetCustomData("bonus", yeah)
 func (i *Invoice) SetCustomData(key string, val interface{}) {
 	i.CustomData[key] = val
 }

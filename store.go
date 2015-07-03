@@ -4,6 +4,7 @@ import (
 	"errors"
 )
 
+// The Store holds the store information and ised to define the store data for mpower transaction
 type Store struct {
 	Name          string `json:"name"`
 	Tagline       string `json:"tagline"`
@@ -12,10 +13,24 @@ type Store struct {
 	LogoURL       string `json:"logo_url"`
 }
 
+// Get - gets a value from the struct by using its field name
+//
+// Example.
+//    key := newStore.Get("Name")
 func (store *Store) Get(fieldName string) string {
 	return get(store, fieldName)
 }
 
+// NewStore - returns a new store object
+//
+// Example.
+//    newSetup := mpower.NewStore(map[string]string{
+//        "name":          "Awesome Store",
+//        "tagline":       "Easy shopping",
+//        "phoneNumber":   "0272271893",
+//        "postalAddress": "P.0. Box MP555, Accra",
+//        "logoURL":       "http://www.awesomestore.com.gh/logo.png",
+//    })
 func NewStore(storeInfo interface{}) (error, *Store) {
 	var store *Store
 	var err error

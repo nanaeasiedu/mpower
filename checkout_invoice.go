@@ -56,7 +56,7 @@ func (c *CheckoutInvoice) Create() (bool, error) {
 	}
 
 	if content, err := json.Marshal(c.Invoice); err != nil {
-		panic("Error encoding json")
+		return false, error
 	} else {
 		req.Send(bytes.NewBuffer(content).String())
 	}
@@ -67,7 +67,7 @@ func (c *CheckoutInvoice) Create() (bool, error) {
 		return false, fmt.Errorf("%v", err)
 	} else {
 		if err := json.Unmarshal(bytes.NewBufferString(body).Bytes(), &respJson); err != nil {
-			panic("Error decoding json")
+			return false, err
 		} else if respJson.ResponseCode == "00" {
 			c.ResponseText = respJson.ResponseText
 			c.ResponseCode = respJson.ResponseCode

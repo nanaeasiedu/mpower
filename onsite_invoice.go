@@ -82,7 +82,7 @@ func (on *OnsiteInvoice) Create(name string) (bool, error) {
 
 	on.OPRData.Alias = name
 	if content, err := json.Marshal(on); err != nil {
-		panic("Error encoding json")
+		return false, err
 	} else {
 		req.Send(bytes.NewBuffer(content).String())
 	}
@@ -92,7 +92,7 @@ func (on *OnsiteInvoice) Create(name string) (bool, error) {
 		return false, fmt.Errorf("%v", err)
 	} else {
 		if err := json.Unmarshal(bytes.NewBufferString(body).Bytes(), &respJson); err != nil {
-			panic("Error decoding json")
+			return false, err
 		}
 
 		on.ResponseText = respJson.ResponseText
@@ -132,13 +132,13 @@ func (on *OnsiteInvoice) Charge(oprToken, confirmToken string) (bool, error) {
 	}
 
 	if dataByte, err := json.Marshal(data); err != nil {
-		panic("Error encoding struct data")
+		return false, err
 	} else {
 		if _, body, err := req.Send(bytes.NewBuffer(dataByte).String()).End(); err != nil {
 			return false, fmt.Errorf("%v", err)
 		} else {
 			if err := json.Unmarshal(bytes.NewBufferString(body).Bytes(), &respData); err != nil {
-				panic("Error decoding json")
+				return false, err
 			}
 
 			on.ResponseText = respData.ResponseText

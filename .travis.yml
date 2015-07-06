@@ -1,0 +1,8 @@
+language: go
+
+go:
+  - 1.4.2
+
+install:
+    go get github.com/stretchr/testify
+    go get github.com/parnurzeal/gorequest

@@ -2,7 +2,7 @@ language: go
 
 go:
   - 1.4.2
+  - tip
 
 install:
     go get github.com/stretchr/testify
-    go get github.com/parnurzeal/gorequest

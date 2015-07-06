@@ -49,6 +49,7 @@ func (c *CheckoutInvoice) Create() (bool, error) {
 	var respJson responseJsonCheckout
 	req := gorequest.New()
 
+	c.PrepareForRequest()
 	req.Post(c.baseUrl + "/create")
 
 	for key, val := range c.Setup.GetHeaders() {
@@ -56,7 +57,7 @@ func (c *CheckoutInvoice) Create() (bool, error) {
 	}
 
 	if content, err := json.Marshal(c.Invoice); err != nil {
-		return false, error
+		return false, err
 	} else {
 		req.Send(bytes.NewBuffer(content).String())
 	}

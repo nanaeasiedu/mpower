@@ -24,7 +24,7 @@ func (store *Store) Get(fieldName string) string {
 // NewStore - returns a new store object
 //
 // Example.
-//    newSetup := mpower.NewStore(map[string]string{
+//    _, newStore := mpower.NewStore(map[string]string{
 //        "name":          "Awesome Store",
 //        "tagline":       "Easy shopping",
 //        "phoneNumber":   "0272271893",

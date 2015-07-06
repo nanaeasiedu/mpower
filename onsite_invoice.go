@@ -74,6 +74,7 @@ func (on *OnsiteInvoice) Create(name string) (bool, error) {
 	var respJson responseJsonOnsite
 	req := gorequest.New()
 
+	on.PrepareForRequest()
 	req.Post(on.baseUrl + "/create")
 
 	for key, val := range on.Setup.GetHeaders() {

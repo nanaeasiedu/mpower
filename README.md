@@ -30,11 +30,11 @@ Create a new setup instance to use in the checkout or onsite invoice
 
 ```go
 newSetup := mpower.NewSetup(map[string]string{
-    "masterKey":  "55647970-22e1-4e7e-8fb4-56eca2b3b006",
-    "privateKey": "test_private_B8EiE1AGWpb4tVMzVTyFDu9rYoc",
-    "publicKey":  "test_public_B1wo2UVmxUrvwzZuPqpLrWqlA74",
-    "token":      "a6d96e2586c8bbae7c28",
-    "mode":       "test",
+    "masterKey":  YOUR MASTER KEY,
+    "privateKey": YOUR PRIVATE KEY,
+    "publicKey":  YOUR PUBLIC KEY,
+    "token":      YOUR TOKEN,
+    "mode":       MODE,
 })
 ```
 

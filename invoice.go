@@ -50,7 +50,12 @@ type Invoice struct {
 // Example.
 //    checkout := mpower.NewCheckoutInvoice(newSetup, newStore)
 //    checkout.AddItem("Yam Phone", 1, 50.00, 50.00, "Hello World")
-func (i *Invoice) AddItem(name string, quantity int, unitPrice float32, totalPrice float32, desc string) {
+func (i *Invoice) AddItem(name string, quantity int, unitPrice float32, totalPrice float32, desc string) error {
+	for _, value := range i.InvoiceIn.ItemsArr {
+		if value.Name == name {
+			return fmt.Errorf("Invoice item with name %s already exists", name)
+		}
+	}
 	tempItem := item{}
 	tempItem.Name = name
 	tempItem.Quantity = quantity
@@ -59,6 +64,7 @@ func (i *Invoice) AddItem(name string, quantity int, unitPrice float32, totalPri
 	tempItem.Description = desc
 
 	i.InvoiceIn.ItemsArr = append(i.InvoiceIn.ItemsArr, tempItem)
+	return nil
 }
 
 // RemoveItem removes the item with name of `name`
@@ -88,12 +94,18 @@ func (i *Invoice) ClearAllItems() {
 // Example.
 //    checkout := mpower.NewCheckoutInvoice(newSetup, newStore)
 //    checkout.AddTax("VAT", 30.00)
-func (i *Invoice) AddTax(name string, amount float32) {
+func (i *Invoice) AddTax(name string, amount float32) error {
+	for _, value := range i.InvoiceIn.TaxesArr {
+		if value.Name == name {
+			return fmt.Errorf("Tax with %s already exists", name)
+		}
+	}
 	tempTax := tax{}
 	tempTax.Name = name
 	tempTax.Amount = amount
 
 	i.InvoiceIn.TaxesArr = append(i.InvoiceIn.TaxesArr, tempTax)
+	return nil
 }
 
 // RemoveTax removes the tax with name of `name`

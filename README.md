@@ -17,7 +17,7 @@ $ go get github.com/ngenerio/mpowergo
 Create a new store instance to use in the checkout or onsite invoice
 
 ```go
-newSetup := mpower.NewStore(map[string]string{
+newStore := mpower.NewStore(map[string]string{
     "name":          "Awesome Store",
     "tagline":       "Easy shopping",
     "phoneNumber":   "0272271893",

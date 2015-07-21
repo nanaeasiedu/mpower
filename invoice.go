@@ -34,7 +34,7 @@ type invoice struct {
 	Actions     map[string]string `json:"actions,omitempty"`
 }
 
-// The invoice definition
+// Invoice definition
 // It specifies the required field keys and values we will be sending over to mpower
 // This is supposed to be an embedded struct in the Onsite Invoice and Checkout Invoice
 type Invoice struct {
@@ -89,7 +89,7 @@ func (i *Invoice) ClearAllItems() {
 	i.InvoiceIn.Items = make(map[string]item)
 }
 
-// AddItem add an `tax - struct` to the taxes in the invoice
+// AddTax add an `tax - struct` to the taxes in the invoice
 //
 // Example.
 //    checkout := mpower.NewCheckoutInvoice(newSetup, newStore)
@@ -139,7 +139,7 @@ func (i *Invoice) Clear() {
 	i.ClearAllTaxes()
 }
 
-// Sets the description for the invoice
+// SetDescription the description for the invoice
 //
 // Example.
 //    checkout := mpower.NewCheckoutInvoice(newSetup, newStore)
@@ -152,7 +152,7 @@ func (i *Invoice) SetDescription(desc string) {
 	i.InvoiceIn.Description = desc
 }
 
-// Sets the total amount on the invoice
+// SetTotalAmount the total amount on the invoice
 //
 // Example.
 //    checkout := mpower.NewCheckoutInvoice(newSetup, newStore)
@@ -165,7 +165,7 @@ func (i *Invoice) SetTotalAmount(amt float32) {
 	i.InvoiceIn.TotalAmount = amt
 }
 
-// Sets the total amount on the invoice
+// SetCustomData the total amount on the invoice
 //
 // Example.
 //    checkout := mpower.NewCheckoutInvoice(newSetup, newStore)
@@ -179,6 +179,8 @@ func (i *Invoice) SetCustomData(key string, val interface{}) {
 	i.Unlock()
 }
 
+// PrepareForRequest prepares the invoice for request
+// This is called before the request to mpower invoice is made to set the items and taxes into a json format
 func (i *Invoice) PrepareForRequest() {
 	i.InvoiceIn.Items = make(map[string]item)
 	i.InvoiceIn.Taxes = make(map[string]tax)

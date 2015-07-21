@@ -9,13 +9,13 @@ import (
 
 // DirectPay - the direct pay object as defined by mpower
 type DirectPay struct {
-	baseUrl       string
+	baseURL       string
 	Setup         *Setup
 	Status        string
 	ResponseCode  string
 	ResponseText  string
 	Description   string
-	TransactionId string
+	TransactionID string
 }
 
 // payDta - `struct` to send the data as json to mpower
@@ -29,7 +29,7 @@ type directPayReponse struct {
 	RespnseCode   string `json:"response_code"`
 	ResponseText  string `json:"response_text"`
 	Description   string `json:"description"`
-	TransactionId string `json:"transaction_id"`
+	TransactionID string `json:"transaction_id"`
 }
 
 // CreditAccount - credits the account of an mpower customer
@@ -44,7 +44,7 @@ func (d *DirectPay) CreditAccount(account string, amount int) (bool, error) {
 	dataToSend := payData{account, amount}
 	req := gorequest.New()
 
-	req.Post(d.baseUrl + "/credit-account")
+	req.Post(d.baseURL + "/credit-account")
 	var dataToRecv directPayReponse
 
 	for key, val := range d.Setup.GetHeaders() {
@@ -69,7 +69,7 @@ func (d *DirectPay) CreditAccount(account string, amount int) (bool, error) {
 			d.ResponseCode = dataToRecv.RespnseCode
 			d.ResponseText = dataToRecv.ResponseText
 			d.Description = dataToRecv.Description
-			d.TransactionId = dataToRecv.TransactionId
+			d.TransactionID = dataToRecv.TransactionID
 
 			return true, nil
 		}
@@ -83,7 +83,7 @@ func (d *DirectPay) CreditAccount(account string, amount int) (bool, error) {
 // NewDirectPay - creates a DirectPay instance
 func NewDirectPay(setup *Setup) *DirectPay {
 	directIns := &DirectPay{Setup: setup}
-	directIns.baseUrl = directIns.Setup.BASE_URL + "/direct-pay"
+	directIns.baseURL = directIns.Setup.BASE_URL + "/direct-pay"
 
 	return directIns
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/parnurzeal/gorequest"
 )
 
+// OnsiteInvoice
 // The onsite definition as defined by mpower documentation
 // This struct holds all the data with respect to onsite request
 type OnsiteInvoice struct {
@@ -14,8 +15,8 @@ type OnsiteInvoice struct {
 	OPRData struct {
 		Alias string `json:"account_alias"`
 	} `json:"opr_data"`
-	baseUrl      string `json:"-"`
-	ReceiptUrl   string `json:"-"`
+	baseURL      string `json:"-"`
+	ReceiptURL   string `json:"-"`
 	ResponseCode string `json:"-"`
 	ResponseText string `json:"-"`
 	Description  string `json:"-"`
@@ -29,7 +30,7 @@ type OnsiteInvoice struct {
 	} `json:"-"`
 }
 
-type responseJsonOnsite struct {
+type responseJSONOnsite struct {
 	ResponseCode string `json:"response_code"`
 	ResponseText string `json:"response_text"`
 	Description  string `json:"description"`
@@ -42,7 +43,7 @@ type oprResponse struct {
 	ResponseText string `json:"response_text"`
 	Description  string `json:"description"`
 	InvoiceData  struct {
-		ReceiptUrl string `json:"receipt_url"`
+		ReceiptURL string `json:"receipt_url"`
 		Status     string `json:"status"`
 		Customer   struct {
 			Name  string `json:"name"`
@@ -71,11 +72,11 @@ type opr struct {
 //          fmt.Printf("%v", err)
 //      }
 func (on *OnsiteInvoice) Create(name string) (bool, error) {
-	var respJson responseJsonOnsite
+	var respJSON responseJSONOnsite
 	req := gorequest.New()
 
 	on.PrepareForRequest()
-	req.Post(on.baseUrl + "/create")
+	req.Post(on.baseURL + "/create")
 
 	for key, val := range on.Setup.GetHeaders() {
 		req.Set(key, val)
@@ -92,16 +93,16 @@ func (on *OnsiteInvoice) Create(name string) (bool, error) {
 		on.Status = resp.Status
 		return false, fmt.Errorf("%v", err)
 	} else {
-		if err := json.Unmarshal(bytes.NewBufferString(body).Bytes(), &respJson); err != nil {
+		if err := json.Unmarshal(bytes.NewBufferString(body).Bytes(), &respJSON); err != nil {
 			return false, err
 		}
 
-		on.ResponseText = respJson.ResponseText
-		on.ResponseCode = respJson.ResponseCode
-		if respJson.ResponseCode == "00" {
-			on.Description = respJson.Description
-			on.Token = respJson.Token
-			on.InvoiceToken = respJson.InvoiceToken
+		on.ResponseText = respJSON.ResponseText
+		on.ResponseCode = respJSON.ResponseCode
+		if respJSON.ResponseCode == "00" {
+			on.Description = respJSON.Description
+			on.Token = respJSON.Token
+			on.InvoiceToken = respJSON.InvoiceToken
 
 			return true, nil
 		}
@@ -128,7 +129,7 @@ func (on *OnsiteInvoice) Charge(oprToken, confirmToken string) (bool, error) {
 	data := opr{oprToken, confirmToken}
 	req := gorequest.New()
 
-	req.Post(on.baseUrl + "/charge")
+	req.Post(on.baseURL + "/charge")
 	for key, val := range on.Setup.GetHeaders() {
 		req.Set(key, val)
 	}
@@ -149,7 +150,7 @@ func (on *OnsiteInvoice) Charge(oprToken, confirmToken string) (bool, error) {
 			if respData.ResponseCode == "00" {
 				on.Description = respData.Description
 				on.Status = respData.InvoiceData.Status
-				on.ReceiptUrl = respData.InvoiceData.ReceiptUrl
+				on.ReceiptURL = respData.InvoiceData.ReceiptURL
 				return true, nil
 			} else {
 				return false, fmt.Errorf("Failed to charge invoice. Check OPR or confirm token and try again.")
@@ -165,6 +166,6 @@ func (on *OnsiteInvoice) Charge(oprToken, confirmToken string) (bool, error) {
 //    onsite := mpower.NewOnsiteInvoice(newSetup, newStore)
 func NewOnsiteInvoice(setup *Setup, store *Store) *OnsiteInvoice {
 	onsiteInvoiceIns := &OnsiteInvoice{Invoice: Invoice{Setup: setup, Store: *store}}
-	onsiteInvoiceIns.baseUrl = onsiteInvoiceIns.Invoice.Setup.BASE_URL + "/opr"
+	onsiteInvoiceIns.baseURL = onsiteInvoiceIns.Invoice.Setup.BASE_URL + "/opr"
 	return onsiteInvoiceIns
 }

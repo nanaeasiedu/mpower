@@ -1,8 +1,8 @@
 package mpower
 
 const (
-	BASE_URL_LIVE = "https://app.mpowerpayments.com/api/v1"
-	BASE_URL_TEST = "https://app.mpowerpayments.com/sandbox-api/v1"
+	baseLive = "https://app.mpowerpayments.com/api/v1"
+	baseTest = "https://app.mpowerpayments.com/sandbox-api/v1"
 )
 
 // The Setup as defined by mpower docs with the exception of the BASE_URL
@@ -56,9 +56,9 @@ func NewSetup(setupInfo map[string]string) *Setup {
 	}
 
 	if val, ok := setupInfo["mode"]; ok && val == "live" {
-		setup.BASE_URL = BASE_URL_LIVE
+		setup.BASE_URL = baseLive
 	} else {
-		setup.BASE_URL = BASE_URL_TEST
+		setup.BASE_URL = baseTest
 	}
 
 	return setup

@@ -11,7 +11,7 @@ import (
 // Invoice is an embedded struct, so all methods of Invoice can be called on it
 type CheckoutInvoice struct {
 	Invoice
-	baseUrl      string `json:"-"`
+	baseURL      string `json:"-"`
 	ResponseCode string `json:"-"`
 	ResponseText string `json:"-"`
 	Description  string `json:"-"`
@@ -21,7 +21,7 @@ type CheckoutInvoice struct {
 
 // The response data as specified by the mpower
 // It retrieves the response json data and stores it on the checkout invoice object
-type responseJsonCheckout struct {
+type responseJSONCheckout struct {
 	ResponseCode string `json:"response_code"`
 	ResponseText string `json:"response_text"`
 	Description  string `json:"description"`
@@ -46,11 +46,11 @@ type stat struct {
 //      //there was an error
 //    }
 func (c *CheckoutInvoice) Create() (bool, error) {
-	var respJson responseJsonCheckout
+	var respJSON responseJSONCheckout
 	req := gorequest.New()
 
 	c.PrepareForRequest()
-	req.Post(c.baseUrl + "/create")
+	req.Post(c.baseURL + "/create")
 
 	for key, val := range c.Setup.GetHeaders() {
 		req.Set(key, val)
@@ -67,13 +67,15 @@ func (c *CheckoutInvoice) Create() (bool, error) {
 		c.Status = resp.Status
 		return false, fmt.Errorf("%v", err)
 	} else {
-		if err := json.Unmarshal(bytes.NewBufferString(body).Bytes(), &respJson); err != nil {
+		if err := json.Unmarshal(bytes.NewBufferString(body).Bytes(), &respJSON); err != nil {
 			return false, err
-		} else if respJson.ResponseCode == "00" {
-			c.ResponseText = respJson.ResponseText
-			c.ResponseCode = respJson.ResponseCode
-			c.Description = respJson.Description
-			c.Token = respJson.Token
+		}
+
+		if respJSON.ResponseCode == "00" {
+			c.ResponseText = respJSON.ResponseText
+			c.ResponseCode = respJSON.ResponseCode
+			c.Description = respJSON.Description
+			c.Token = respJSON.Token
 
 			return true, nil
 		}
@@ -82,11 +84,11 @@ func (c *CheckoutInvoice) Create() (bool, error) {
 	}
 }
 
-// GetInvoiceUrl - get the invoice's url from the response
+// GetInvoiceURL - get the invoice's url from the response
 //
 // Example.
-//    str := checkout.GetInvoiceUrl()
-func (c *CheckoutInvoice) GetInvoiceUrl() string {
+//    str := checkout.GetInvoiceURL()
+func (c *CheckoutInvoice) GetInvoiceURL() string {
 	if c.Token == "" {
 		panic("Token currently not available")
 	}
@@ -94,11 +96,15 @@ func (c *CheckoutInvoice) GetInvoiceUrl() string {
 	return c.ResponseText
 }
 
+// Confirm - This confirms the token status
+//
+// Example.
+//     str, err := checkout.Confirm("434-5455-adf4-fgt5")
 func (c *CheckoutInvoice) Confirm(token string) (string, error) {
 	var status stat
 	req := gorequest.New()
 
-	req.Get(c.baseUrl + "/confirm/" + token)
+	req.Get(c.baseURL + "/confirm/" + token)
 	for key, val := range c.Setup.GetHeaders() {
 		req.Set(key, val)
 	}
@@ -113,9 +119,9 @@ func (c *CheckoutInvoice) Confirm(token string) (string, error) {
 
 		if status.responseCode == "00" {
 			return status.status, nil
-		} else {
-			return "", fmt.Errorf("Could not confirm invoice status")
 		}
+
+		return "", fmt.Errorf("Could not confirm invoice status")
 	}
 }
 
@@ -125,6 +131,6 @@ func (c *CheckoutInvoice) Confirm(token string) (string, error) {
 //     checkout := mpower.NewCheckoutInvoice(newSetup, newStore)
 func NewCheckoutInvoice(setup *Setup, store *Store) *CheckoutInvoice {
 	checkoutInvoiceIns := &CheckoutInvoice{Invoice: Invoice{Setup: setup, Store: *store}}
-	checkoutInvoiceIns.baseUrl = checkoutInvoiceIns.Invoice.Setup.BASE_URL + "/checkout-invoice"
+	checkoutInvoiceIns.baseURL = checkoutInvoiceIns.Invoice.Setup.BASE_URL + "/checkout-invoice"
 	return checkoutInvoiceIns
 }

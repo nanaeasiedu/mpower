@@ -117,3 +117,7 @@ if str, err := checkout.Confirm(token); err != nil {
     // do something
 }
 ```
+
+
+For more docs, read up:
+[Mpowergo docs](https://godoc.org/github.com/ngenerio/mpowergo)

@@ -83,7 +83,7 @@ func (d *DirectPay) CreditAccount(account string, amount int) (bool, error) {
 // NewDirectPay - creates a DirectPay instance
 func NewDirectPay(setup *Setup) *DirectPay {
 	directIns := &DirectPay{Setup: setup}
-	directIns.baseURL = directIns.Setup.BASE_URL + "/direct-pay"
+	directIns.baseURL = directIns.Setup.BaseURL + "/direct-pay"
 
 	return directIns
 }

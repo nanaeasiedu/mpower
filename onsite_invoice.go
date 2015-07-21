@@ -166,6 +166,6 @@ func (on *OnsiteInvoice) Charge(oprToken, confirmToken string) (bool, error) {
 //    onsite := mpower.NewOnsiteInvoice(newSetup, newStore)
 func NewOnsiteInvoice(setup *Setup, store *Store) *OnsiteInvoice {
 	onsiteInvoiceIns := &OnsiteInvoice{Invoice: Invoice{Setup: setup, Store: *store}}
-	onsiteInvoiceIns.baseURL = onsiteInvoiceIns.Invoice.Setup.BASE_URL + "/opr"
+	onsiteInvoiceIns.baseURL = onsiteInvoiceIns.Invoice.Setup.BaseURL + "/opr"
 	return onsiteInvoiceIns
 }

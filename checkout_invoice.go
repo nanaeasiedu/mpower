@@ -131,6 +131,6 @@ func (c *CheckoutInvoice) Confirm(token string) (string, error) {
 //     checkout := mpower.NewCheckoutInvoice(newSetup, newStore)
 func NewCheckoutInvoice(setup *Setup, store *Store) *CheckoutInvoice {
 	checkoutInvoiceIns := &CheckoutInvoice{Invoice: Invoice{Setup: setup, Store: *store}}
-	checkoutInvoiceIns.baseURL = checkoutInvoiceIns.Invoice.Setup.BASE_URL + "/checkout-invoice"
+	checkoutInvoiceIns.baseURL = checkoutInvoiceIns.Invoice.Setup.BaseURL + "/checkout-invoice"
 	return checkoutInvoiceIns
 }

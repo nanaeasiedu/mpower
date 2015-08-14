@@ -1,5 +1,5 @@
 {
-	"ImportPath": "github.com/ngenerio/mpower",
+	"ImportPath": "github.com/ngenerio/mpowergo",
 	"GoVersion": "go1.4.2",
 	"Deps": [
 		{

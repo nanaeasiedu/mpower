@@ -22,10 +22,10 @@ func (s *InvoiceSuiteTest) SetupSuite() {
 
 	assert.NoError(s.T(), err, "No Error")
 	newSetup := NewSetup(map[string]string{
-		"masterKey":  "55647970-22e1-4e7e-8fb4-56eca2b3b006",
-		"privateKey": "test_private_B8EiE1AGWpb4tVMzVTyFDu9rYoc",
-		"publicKey":  "test_public_B1wo2UVmxUrvwzZuPqpLrWqlA74",
-		"token":      "a6d96e2586c8bbae7c28",
+		"masterKey":  "34545-54565763-2323246-5455",
+		"privateKey": "test_private_afdipfhpisfjroejr",
+		"publicKey":  "test_public_fsofoufyrsfo",
+		"token":      "dapifu09ur0jvsij",
 		"mode":       "test",
 	})
 

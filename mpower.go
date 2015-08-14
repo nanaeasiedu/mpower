@@ -7,7 +7,7 @@ import (
 
 // Get an environment variable or return `def` string as the default
 //
-//    str := env("MP-Master-Key", "55647970-22e1-4e7e-8fb4-56eca2b3b006")
+//    str := envOr("MP-Master-Key", "43545-54545-454532-3232")
 func envOr(name, def string) string {
 	s := os.Getenv(name)
 	if s == "" {

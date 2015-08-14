@@ -77,7 +77,7 @@ func (on *OnsiteInvoice) Create(name string) (bool, error) {
 	on.PrepareForRequest()
 	req.Post(on.baseUrl + "/create")
 
-	for key, val := range on.Setup.GetHeaders() {
+	for key, val := range on.Setup.Headers {
 		req.Set(key, val)
 	}
 
@@ -129,7 +129,7 @@ func (on *OnsiteInvoice) Charge(oprToken, confirmToken string) (bool, error) {
 	req := gorequest.New()
 
 	req.Post(on.baseUrl + "/charge")
-	for key, val := range on.Setup.GetHeaders() {
+	for key, val := range on.Setup.Headers {
 		req.Set(key, val)
 	}
 

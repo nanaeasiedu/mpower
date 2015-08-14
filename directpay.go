@@ -47,7 +47,7 @@ func (d *DirectPay) CreditAccount(account string, amount int) (bool, error) {
 	req.Post(d.baseUrl + "/credit-account")
 	var dataToRecv directPayReponse
 
-	for key, val := range d.Setup.GetHeaders() {
+	for key, val := range d.Setup.Headers {
 		req.Set(key, val)
 	}
 

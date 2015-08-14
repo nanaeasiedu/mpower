@@ -52,7 +52,7 @@ func (c *CheckoutInvoice) Create() (bool, error) {
 	c.PrepareForRequest()
 	req.Post(c.baseUrl + "/create")
 
-	for key, val := range c.Setup.GetHeaders() {
+	for key, val := range c.Setup.Headers {
 		req.Set(key, val)
 	}
 
@@ -99,7 +99,7 @@ func (c *CheckoutInvoice) Confirm(token string) (string, error) {
 	req := gorequest.New()
 
 	req.Get(c.baseUrl + "/confirm/" + token)
-	for key, val := range c.Setup.GetHeaders() {
+	for key, val := range c.Setup.Headers {
 		req.Set(key, val)
 	}
 

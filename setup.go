@@ -13,6 +13,7 @@ type Setup struct {
 	Token       string
 	ContentType string
 	BASE_URL    string
+	Headers     map[string]string
 }
 
 // Get - gets a value from the struct by using its field name
@@ -21,19 +22,6 @@ type Setup struct {
 //    key := newSetup.Get("MasterKey")
 func (setup *Setup) Get(fieldName string) string {
 	return get(setup, fieldName)
-}
-
-// GetHeaders - gets the respective headers to set on a request for an mpower transaction
-func (setup *Setup) GetHeaders() map[string]string {
-	headers := make(map[string]string)
-
-	headers["MP-Master-Key"] = setup.MasterKey
-	headers["MP-Private-Key"] = setup.PrivateKey
-	headers["MP-Public-Key"] = setup.PublicKey
-	headers["MP-Token"] = setup.Token
-	headers["Content-Type"] = setup.ContentType
-
-	return headers
 }
 
 // NewSetup - returns a new setup object
@@ -60,6 +48,13 @@ func NewSetup(setupInfo map[string]string) *Setup {
 	} else {
 		setup.BASE_URL = BASE_URL_TEST
 	}
+
+	setup.Headers = make(map[string]string)
+	setup.Headers["MP-Master-Key"] = setup.MasterKey
+	setup.Headers["MP-Private-Key"] = setup.PrivateKey
+	setup.Headers["MP-Public-Key"] = setup.PublicKey
+	setup.Headers["MP-Token"] = setup.Token
+	setup.Headers["Content-Type"] = setup.ContentType
 
 	return setup
 }

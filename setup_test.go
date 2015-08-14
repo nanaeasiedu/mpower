@@ -26,7 +26,7 @@ func (s *SuiteTestSetup) TestNewSetup() {
 	assert.Equal(s.T(), "test_private_auhidaudvbirbyyrieoib", s.mpowerSetup.Get("PrivateKey"), "Private Keys Keys are equal")
 	assert.Equal(s.T(), "test_public_iopjasdioppdadipjoasd", s.mpowerSetup.Get("PublicKey"), "Public Keys are equal")
 	assert.Equal(s.T(), "ioapdojdifouw8h", s.mpowerSetup.Get("Token"), "Tokens are equal")
-	assert.Equal(s.T(), "https://app.mpowerpayments.com/sandbox-api/v1", s.mpowerSetup.Get("BASE_URL"), "Urls are correct")
+	assert.Equal(s.T(), "https://app.mpowerpayments.com/sandbox-api/v1", s.mpowerSetup.Get("BaseURL"), "Urls are correct")
 }
 
 func (s *SuiteTestSetup) TestNewSetupGetHeaders() {

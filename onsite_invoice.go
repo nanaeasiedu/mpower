@@ -129,7 +129,7 @@ func (on *OnsiteInvoice) Charge(oprToken, confirmToken string) (bool, error) {
 	data := opr{oprToken, confirmToken}
 	req := gorequest.New()
 
-	req.Post(on.baseUrl + "/charge")
+	req.Post(on.baseURL + "/charge")
 	for key, val := range on.Setup.Headers {
 		req.Set(key, val)
 	}

@@ -104,7 +104,7 @@ func (c *CheckoutInvoice) Confirm(token string) (string, error) {
 	var status stat
 	req := gorequest.New()
 
-	req.Get(c.baseUrl + "/confirm/" + token)
+	req.Get(c.baseURL + "/confirm/" + token)
 	for key, val := range c.Setup.Headers {
 		req.Set(key, val)
 	}

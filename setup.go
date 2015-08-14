@@ -1,19 +1,19 @@
 package mpower
 
 const (
-	BASE_URL_LIVE = "https://app.mpowerpayments.com/api/v1"
-	BASE_URL_TEST = "https://app.mpowerpayments.com/sandbox-api/v1"
+	baseLive = "https://app.mpowerpayments.com/api/v1"
+	baseTest = "https://app.mpowerpayments.com/sandbox-api/v1"
 )
 
-// The Setup as defined by mpower docs with the exception of the BASE_URL
+// The Setup as defined by mpower docs with the exception of the BaseURL
 type Setup struct {
 	MasterKey   string
 	PrivateKey  string
 	PublicKey   string
 	Token       string
 	ContentType string
-	BASE_URL    string
 	Headers     map[string]string
+	BaseURL     string
 }
 
 // Get - gets a value from the struct by using its field name
@@ -44,9 +44,9 @@ func NewSetup(setupInfo map[string]string) *Setup {
 	}
 
 	if val, ok := setupInfo["mode"]; ok && val == "live" {
-		setup.BASE_URL = BASE_URL_LIVE
+		setup.BaseURL = baseLive
 	} else {
-		setup.BASE_URL = BASE_URL_TEST
+		setup.BaseURL = baseTest
 	}
 
 	setup.Headers = make(map[string]string)

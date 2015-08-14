@@ -2,6 +2,8 @@
 
 [![Build Status](https://secure.travis-ci.org/ngenerio/mpowergo.png?branch=master)](https://travis-ci.org/ngenerio/mpowergo)
 
+[![GoDoc](https://godoc.org/github.com/ngenerio/mpowergo?status.svg)](https://godoc.org/github.com/ngenerio/mpowergo)
+
 This a go implementation library that interfaces with the mpower http api.
 
 Built on the MPower Payments [`HTTP API (beta)`](http://mpowerpayments.com/developers/http).

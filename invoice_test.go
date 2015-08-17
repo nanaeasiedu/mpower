@@ -12,22 +12,9 @@ type InvoiceSuiteTest struct {
 }
 
 func (s *InvoiceSuiteTest) SetupSuite() {
-	err, newStore := NewStore(map[string]string{
-		"name":          "Awesome Store",
-		"tagline":       "Easy shopping",
-		"phoneNumber":   "0272271893",
-		"postalAddress": "P.0. Box MP555, Accra",
-		"logoURL":       "http://www.awesomestore.com.gh/logo.png",
-	})
+	newStore := NewStore("Awesome Store", "Easy shopping", "0272271893", "P.0. Box MP555, Accra", "http://www.awesomestore.com.gh/logo.png")
 
-	assert.NoError(s.T(), err, "No Error")
-	newSetup := NewSetup(map[string]string{
-		"masterKey":  "34545-54565763-2323246-5455",
-		"privateKey": "test_private_afdipfhpisfjroejr",
-		"publicKey":  "test_public_fsofoufyrsfo",
-		"token":      "dapifu09ur0jvsij",
-		"mode":       "test",
-	})
+	newSetup := NewSetup("43434-54545-45454-545432", "test_private_auhidaudvbirbyyrieoib", "test_public_iopjasdioppdadipjoasd", "ioapdojdifouw8h")
 
 	s.invoice = Invoice{Setup: newSetup, Store: *newStore}
 }
@@ -43,57 +30,57 @@ func (s *InvoiceSuiteTest) TearDownTest() {
 }
 
 func (s *InvoiceSuiteTest) TestAddItem() {
-	assert.Equal(s.T(), 1, len(s.invoice.InvoiceIn.ItemsArr), "items length is 1")
-	assert.NotNil(s.T(), s.invoice.InvoiceIn.ItemsArr, "invoice items contains an item")
-	assert.Equal(s.T(), "Bayere phone", s.invoice.InvoiceIn.ItemsArr[0].Name, "Bayere phone is there")
-	assert.Equal(s.T(), 1, s.invoice.InvoiceIn.ItemsArr[0].Quantity, "Bayere phone is only 1")
+	assert.Equal(s.T(), 1, len(s.invoice.InvoiceData.ItemsArr), "items length is 1")
+	assert.NotNil(s.T(), s.invoice.InvoiceData.ItemsArr, "invoice items contains an item")
+	assert.Equal(s.T(), "Bayere phone", s.invoice.InvoiceData.ItemsArr[0].Name, "Bayere phone is there")
+	assert.Equal(s.T(), 1, s.invoice.InvoiceData.ItemsArr[0].Quantity, "Bayere phone is only 1")
 	s.invoice.AddItem("Sobolo", 1, 5.00, 5.00, "The yoghurt of Africa")
-	assert.Equal(s.T(), 2, len(s.invoice.InvoiceIn.ItemsArr), "items length is 1")
+	assert.Equal(s.T(), 2, len(s.invoice.InvoiceData.ItemsArr), "items length is 1")
 }
 
 func (s *InvoiceSuiteTest) TestRemoveItem() {
 	s.invoice.RemoveItem("Sobolo")
-	assert.Equal(s.T(), 1, len(s.invoice.InvoiceIn.ItemsArr), "items length is 1")
+	assert.Equal(s.T(), 1, len(s.invoice.InvoiceData.ItemsArr), "items length is 1")
 }
 
 func (s *InvoiceSuiteTest) TestClearAllItems() {
-	assert.Equal(s.T(), 1, len(s.invoice.InvoiceIn.ItemsArr), "items length is 1")
-	assert.NotNil(s.T(), s.invoice.InvoiceIn.ItemsArr, "invoice items contains an item")
-	assert.Equal(s.T(), "Bayere phone", s.invoice.InvoiceIn.ItemsArr[0].Name, "Bayere phone is there")
-	assert.Equal(s.T(), 1, s.invoice.InvoiceIn.ItemsArr[0].Quantity, "Bayere phone is only 1")
+	assert.Equal(s.T(), 1, len(s.invoice.InvoiceData.ItemsArr), "items length is 1")
+	assert.NotNil(s.T(), s.invoice.InvoiceData.ItemsArr, "invoice items contains an item")
+	assert.Equal(s.T(), "Bayere phone", s.invoice.InvoiceData.ItemsArr[0].Name, "Bayere phone is there")
+	assert.Equal(s.T(), 1, s.invoice.InvoiceData.ItemsArr[0].Quantity, "Bayere phone is only 1")
 
 	s.invoice.ClearAllItems()
-	assert.Equal(s.T(), 0, len(s.invoice.InvoiceIn.ItemsArr), "no item exists")
+	assert.Equal(s.T(), 0, len(s.invoice.InvoiceData.ItemsArr), "no item exists")
 }
 
 func (s *InvoiceSuiteTest) TestAddTax() {
-	assert.Equal(s.T(), 1, len(s.invoice.InvoiceIn.TaxesArr), "taxeslength is 1")
-	assert.NotNil(s.T(), s.invoice.InvoiceIn.TaxesArr, "invoice taxes contains an tax")
-	assert.Equal(s.T(), "VAT", s.invoice.InvoiceIn.TaxesArr[0].Name, "Tax is there")
-	assert.Equal(s.T(), float32(30.00), s.invoice.InvoiceIn.TaxesArr[0].Amount, "Tax is there")
+	assert.Equal(s.T(), 1, len(s.invoice.InvoiceData.TaxesArr), "taxeslength is 1")
+	assert.NotNil(s.T(), s.invoice.InvoiceData.TaxesArr, "invoice taxes contains an tax")
+	assert.Equal(s.T(), "VAT", s.invoice.InvoiceData.TaxesArr[0].Name, "Tax is there")
+	assert.Equal(s.T(), float32(30.00), s.invoice.InvoiceData.TaxesArr[0].Amount, "Tax is there")
 	s.invoice.AddTax("NHIL", 500.00)
-	assert.Equal(s.T(), 2, len(s.invoice.InvoiceIn.TaxesArr), "taxes length is 2")
+	assert.Equal(s.T(), 2, len(s.invoice.InvoiceData.TaxesArr), "taxes length is 2")
 }
 
 func (s *InvoiceSuiteTest) TestRemoveTax() {
 	s.invoice.RemoveTax("NHIL")
-	assert.Equal(s.T(), 1, len(s.invoice.InvoiceIn.TaxesArr), "taxes length is 1")
+	assert.Equal(s.T(), 1, len(s.invoice.InvoiceData.TaxesArr), "taxes length is 1")
 }
 
 func (s *InvoiceSuiteTest) TestClear() {
 	s.invoice.Clear()
-	assert.Equal(s.T(), 0, len(s.invoice.InvoiceIn.TaxesArr), "taxes length is 0")
-	assert.Equal(s.T(), 0, len(s.invoice.InvoiceIn.ItemsArr), "items length is 0")
+	assert.Equal(s.T(), 0, len(s.invoice.InvoiceData.TaxesArr), "taxes length is 0")
+	assert.Equal(s.T(), 0, len(s.invoice.InvoiceData.ItemsArr), "items length is 0")
 }
 
 func (s *InvoiceSuiteTest) TestSetDescription() {
 	s.invoice.SetDescription("desc")
-	assert.Equal(s.T(), "desc", s.invoice.InvoiceIn.Description, "description is equal")
+	assert.Equal(s.T(), "desc", s.invoice.InvoiceData.Description, "description is equal")
 }
 
 func (s *InvoiceSuiteTest) TestSetTotalAmount() {
 	s.invoice.SetTotalAmount(50.00)
-	assert.Equal(s.T(), float32(50.00), s.invoice.InvoiceIn.TotalAmount, "total amount is 50.00")
+	assert.Equal(s.T(), float32(50.00), s.invoice.InvoiceData.TotalAmount, "total amount is 50.00")
 }
 
 func (s *InvoiceSuiteTest) TestCustomData() {
@@ -103,8 +90,8 @@ func (s *InvoiceSuiteTest) TestCustomData() {
 
 func (s *InvoiceSuiteTest) TestPrepForRequest() {
 	s.invoice.PrepareForRequest()
-	assert.Equal(s.T(), "VAT", s.invoice.InvoiceIn.Taxes["tax_0"].Name, "Tax name is VAT")
-	assert.Equal(s.T(), "Bayere phone", s.invoice.InvoiceIn.Items["item_0"].Name, "Item name is bayere")
+	assert.Equal(s.T(), "VAT", s.invoice.InvoiceData.Taxes["tax_0"].Name, "Tax name is VAT")
+	assert.Equal(s.T(), "Bayere phone", s.invoice.InvoiceData.Items["item_0"].Name, "Item name is bayere")
 }
 
 func TestInvoiceSuiteTest(t *testing.T) {

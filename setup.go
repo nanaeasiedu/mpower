@@ -16,45 +16,38 @@ type Setup struct {
 	BaseURL     string
 }
 
-// Get - gets a value from the struct by using its field name
-//
-// Example.
-//    key := newSetup.Get("MasterKey")
-func (setup *Setup) Get(fieldName string) string {
-	return get(setup, fieldName)
-}
-
 // NewSetup - returns a new setup object
-//
-// Example.
-//    newSetup := mpower.NewSetup(map[string]string{
-//        "masterKey":  YOUR MASTER KEY,
-//        "privateKey": YOUR PRIVATE KEY,
-//        "publicKey":  "YOUR PUBLIC KEY,
-//        "token":      YOUR TOKEN,
-//        "mode":       MODE,
-//    })
-func NewSetup(setupInfo map[string]string) *Setup {
+func NewSetup(masterKey, privateKey, publicKey, token string) *Setup {
 	setup := &Setup{
-		MasterKey:   envOr("MP-Master-Key", setupInfo["masterKey"]),
-		PrivateKey:  envOr("MP-Private-Key", setupInfo["privateKey"]),
-		PublicKey:   envOr("MP-Public-Key", setupInfo["publicKey"]),
-		Token:       envOr("MP-Token", setupInfo["token"]),
-		ContentType: "application/json",
+		MasterKey:  masterKey,
+		PrivateKey: privateKey,
+		PublicKey:  publicKey,
+		Token:      token,
 	}
 
-	if val, ok := setupInfo["mode"]; ok && val == "live" {
-		setup.BaseURL = baseLive
-	} else {
-		setup.BaseURL = baseTest
-	}
-
-	setup.Headers = make(map[string]string)
-	setup.Headers["MP-Master-Key"] = setup.MasterKey
-	setup.Headers["MP-Private-Key"] = setup.PrivateKey
-	setup.Headers["MP-Public-Key"] = setup.PublicKey
-	setup.Headers["MP-Token"] = setup.Token
-	setup.Headers["Content-Type"] = setup.ContentType
+	setup.setupHeaders()
 
 	return setup
+}
+
+func NewSetupFromEnv() *Setup {
+	setup := &Setup{
+		MasterKey:  env("MP-Master-Key"),
+		PrivateKey: env("MP-Private-Key"),
+		PublicKey:  env("MP-Public-Key"),
+		Token:      env("MP-Token"),
+	}
+
+	setup.setupHeaders()
+
+	return setup
+}
+
+func (s *Setup) setupHeaders() {
+	s.Headers = make(map[string]string)
+	s.Headers["MP-Master-Key"] = s.MasterKey
+	s.Headers["MP-Private-Key"] = s.PrivateKey
+	s.Headers["MP-Public-Key"] = s.PublicKey
+	s.Headers["MP-Token"] = s.Token
+	s.Headers["Content-Type"] = "application/json"
 }

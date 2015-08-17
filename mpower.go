@@ -27,7 +27,7 @@ type MPower struct {
 	Session *napping.Session
 }
 
-func (mp *MPower) NewRequest(method, url string, payload, result interface{}, header *http.Header) (*napping.Response, error) {
+func (mp *MPower) NewRequest(method, url string, payload, result interface{}, header *http.Header) (resp *napping.Response, err error) {
 	request := &napping.Request{
 		Method:  method,
 		Url:     url,
@@ -36,14 +36,17 @@ func (mp *MPower) NewRequest(method, url string, payload, result interface{}, he
 	}
 
 	if header != nil {
-		oldHeaderCopy := mp.Session.Header
 		mp.Session.Header = header
 		defer func() {
-			mp.Session.Header = oldHeaderCopy
+			mp.Session.Header = new(http.Header)
+			for key, val := range mp.setup.Headers {
+				mp.Session.Header.Add(key, val)
+			}
 		}()
 	}
 
-	return mp.Session.Send(request)
+	resp, err = mp.Session.Send(request)
+	return
 }
 
 // NewMPower creates a new MPower

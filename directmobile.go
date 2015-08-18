@@ -36,6 +36,15 @@ type DirectMobileStatusResponse struct {
 	CancelReason        string `json:"cancel_reason"`
 }
 
+func (d *DirectMobile) directMobileLiveHeader() *http.Header {
+	header := new(http.Header)
+	header.Add("MP-Master-Key", d.mpower.setup.MasterKey)
+	header.Add("MP-Private-Key", d.mpower.setup.PrivateKey)
+	header.Add("MP-Token", d.mpower.setup.Token)
+
+	return header
+}
+
 // Charge charges customers' mobile money money wallets directly on your site or application
 //
 // Example.
@@ -44,12 +53,7 @@ func (d *DirectMobile) Charge(name, email, phone, merchant, wallet, amount strin
 	payload := &DirectMobileRequest{name, email, phone, merchant, wallet, amount}
 	responseBody := &DirectMobileResponse{}
 
-	header := new(http.Header)
-	header.Add("MP-Master-Key", d.mpower.setup.MasterKey)
-	header.Add("MP-Private-Key", d.mpower.setup.PrivateKey)
-	header.Add("MP-Token", d.mpower.setup.Token)
-
-	response, err := d.mpower.NewRequest("POST", d.baseURL+"/charge", payload, responseBody, header)
+	response, err := d.mpower.NewRequest("POST", d.baseURL+"/charge", payload, responseBody, d.directMobileLiveHeader())
 
 	if err != nil || responseBody.ResponseCode != "00" {
 		return nil, response, err
@@ -64,15 +68,10 @@ func (d *DirectMobile) Status(token string) (*DirectMobileStatusResponse, *nappi
 	}{token}
 	responseBody := &DirectMobileStatusResponse{}
 
-	header := new(http.Header)
-	header.Add("MP-Master-Key", d.mpower.setup.MasterKey)
-	header.Add("MP-Private-Key", d.mpower.setup.PrivateKey)
-	header.Add("MP-Token", d.mpower.setup.Token)
-
-	response, err := d.mpower.NewRequest("POST", d.baseURL+"/status", payload, responseBody, header)
+	response, err := d.mpower.NewRequest("POST", d.baseURL+"/status", payload, responseBody, d.directMobileLiveHeader())
 
 	if err != nil || responseBody.ResponseCode != "00" {
-		return nil, nil, err
+		return nil, response, err
 	}
 
 	return responseBody, response, nil

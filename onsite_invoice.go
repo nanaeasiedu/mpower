@@ -60,7 +60,7 @@ func (on *OnsiteInvoice) Create(name string) (*OnsiteInvoiceResponse, *napping.R
 	resp, err := on.mpower.NewRequest("POST", on.baseURL+"/create", requestBody, responseBody, nil)
 
 	if err != nil {
-		return nil, nil, err
+		return nil, resp, err
 	}
 
 	return responseBody, resp, err
@@ -75,7 +75,7 @@ func (on *OnsiteInvoice) Charge(onsitePaymentRequestToken, customerConfirmToken 
 	resp, err := on.mpower.NewRequest("POST", on.baseURL+"/charge", payload, responseBody, nil)
 
 	if err != nil {
-		return nil, nil, err
+		return nil, resp, err
 	}
 
 	return responseBody, resp, err

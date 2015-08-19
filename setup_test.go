@@ -12,21 +12,14 @@ type SuiteTestSetup struct {
 }
 
 func (s *SuiteTestSetup) SetupSuite() {
-	s.mpowerSetup = NewSetup(map[string]string{
-		"masterKey":  "43434-54545-45454-545432",
-		"privateKey": "test_private_auhidaudvbirbyyrieoib",
-		"publicKey":  "test_public_iopjasdioppdadipjoasd",
-		"token":      "ioapdojdifouw8h",
-		"mode":       "test",
-	})
+	s.mpowerSetup = NewSetup("43434-54545-45454-545432", "test_private_auhidaudvbirbyyrieoib", "test_public_iopjasdioppdadipjoasd", "ioapdojdifouw8h")
 }
 
 func (s *SuiteTestSetup) TestNewSetup() {
-	assert.Equal(s.T(), "43434-54545-45454-545432", s.mpowerSetup.Get("MasterKey"), "Master Keys are equal")
-	assert.Equal(s.T(), "test_private_auhidaudvbirbyyrieoib", s.mpowerSetup.Get("PrivateKey"), "Private Keys Keys are equal")
-	assert.Equal(s.T(), "test_public_iopjasdioppdadipjoasd", s.mpowerSetup.Get("PublicKey"), "Public Keys are equal")
-	assert.Equal(s.T(), "ioapdojdifouw8h", s.mpowerSetup.Get("Token"), "Tokens are equal")
-	assert.Equal(s.T(), "https://app.mpowerpayments.com/sandbox-api/v1", s.mpowerSetup.Get("BaseURL"), "Urls are correct")
+	assert.Equal(s.T(), "43434-54545-45454-545432", s.mpowerSetup.MasterKey, "Master Keys are equal")
+	assert.Equal(s.T(), "test_private_auhidaudvbirbyyrieoib", s.mpowerSetup.PrivateKey, "Private Keys Keys are equal")
+	assert.Equal(s.T(), "test_public_iopjasdioppdadipjoasd", s.mpowerSetup.PublicKey, "Public Keys are equal")
+	assert.Equal(s.T(), "ioapdojdifouw8h", s.mpowerSetup.Token, "Tokens are equal")
 }
 
 func (s *SuiteTestSetup) TestNewSetupGetHeaders() {

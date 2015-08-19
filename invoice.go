@@ -39,10 +39,10 @@ type invoice struct {
 // This is supposed to be an embedded struct in the Onsite Invoice and Checkout Invoice
 type Invoice struct {
 	sync.RWMutex
-	Setup      *Setup                 `json:"-"`
-	Store      Store                  `json:"store"`
-	InvoiceIn  invoice                `json:"invoice"`
-	CustomData map[string]interface{} `json:"custom_data,omitempty"`
+	Setup       *Setup                 `json:"-"`
+	Store       Store                  `json:"store"`
+	InvoiceData invoice                `json:"invoice"`
+	CustomData  map[string]interface{} `json:"custom_data,omitempty"`
 }
 
 // AddItem add an `item - struct` to the items in the invoice
@@ -51,7 +51,7 @@ type Invoice struct {
 //    checkout := mpower.NewCheckoutInvoice(newSetup, newStore)
 //    checkout.AddItem("Yam Phone", 1, 50.00, 50.00, "Hello World")
 func (i *Invoice) AddItem(name string, quantity int, unitPrice float32, totalPrice float32, desc string) error {
-	for _, value := range i.InvoiceIn.ItemsArr {
+	for _, value := range i.InvoiceData.ItemsArr {
 		if value.Name == name {
 			return fmt.Errorf("Invoice item with name %s already exists", name)
 		}
@@ -63,7 +63,7 @@ func (i *Invoice) AddItem(name string, quantity int, unitPrice float32, totalPri
 	tempItem.TotalPrice = totalPrice
 	tempItem.Description = desc
 
-	i.InvoiceIn.ItemsArr = append(i.InvoiceIn.ItemsArr, tempItem)
+	i.InvoiceData.ItemsArr = append(i.InvoiceData.ItemsArr, tempItem)
 	return nil
 }
 
@@ -72,9 +72,9 @@ func (i *Invoice) AddItem(name string, quantity int, unitPrice float32, totalPri
 // Example.
 //     checkout.RemoveItem()
 func (i *Invoice) RemoveItem(name string) {
-	for ix, value := range i.InvoiceIn.ItemsArr {
+	for ix, value := range i.InvoiceData.ItemsArr {
 		if value.Name == name {
-			i.InvoiceIn.ItemsArr = append(i.InvoiceIn.ItemsArr[:ix], i.InvoiceIn.ItemsArr[ix+1:]...)
+			i.InvoiceData.ItemsArr = append(i.InvoiceData.ItemsArr[:ix], i.InvoiceData.ItemsArr[ix+1:]...)
 			break
 		}
 	}
@@ -85,8 +85,8 @@ func (i *Invoice) RemoveItem(name string) {
 // Example.
 //     checkout.ClearAllItems()
 func (i *Invoice) ClearAllItems() {
-	i.InvoiceIn.ItemsArr = nil
-	i.InvoiceIn.Items = make(map[string]item)
+	i.InvoiceData.ItemsArr = nil
+	i.InvoiceData.Items = make(map[string]item)
 }
 
 // AddTax add an `tax - struct` to the taxes in the invoice
@@ -95,7 +95,7 @@ func (i *Invoice) ClearAllItems() {
 //    checkout := mpower.NewCheckoutInvoice(newSetup, newStore)
 //    checkout.AddTax("VAT", 30.00)
 func (i *Invoice) AddTax(name string, amount float32) error {
-	for _, value := range i.InvoiceIn.TaxesArr {
+	for _, value := range i.InvoiceData.TaxesArr {
 		if value.Name == name {
 			return fmt.Errorf("Tax with %s already exists", name)
 		}
@@ -104,7 +104,7 @@ func (i *Invoice) AddTax(name string, amount float32) error {
 	tempTax.Name = name
 	tempTax.Amount = amount
 
-	i.InvoiceIn.TaxesArr = append(i.InvoiceIn.TaxesArr, tempTax)
+	i.InvoiceData.TaxesArr = append(i.InvoiceData.TaxesArr, tempTax)
 	return nil
 }
 
@@ -113,9 +113,9 @@ func (i *Invoice) AddTax(name string, amount float32) error {
 // Example.
 //     checkout.RemoveTax()
 func (i *Invoice) RemoveTax(name string) {
-	for ix, value := range i.InvoiceIn.TaxesArr {
+	for ix, value := range i.InvoiceData.TaxesArr {
 		if value.Name == name {
-			i.InvoiceIn.TaxesArr = append(i.InvoiceIn.TaxesArr[:ix], i.InvoiceIn.TaxesArr[ix+1:]...)
+			i.InvoiceData.TaxesArr = append(i.InvoiceData.TaxesArr[:ix], i.InvoiceData.TaxesArr[ix+1:]...)
 			break
 		}
 	}
@@ -126,8 +126,8 @@ func (i *Invoice) RemoveTax(name string) {
 // Example.
 //     checkout.ClearAllTaxes()
 func (i *Invoice) ClearAllTaxes() {
-	i.InvoiceIn.TaxesArr = nil
-	i.InvoiceIn.Taxes = make(map[string]tax)
+	i.InvoiceData.TaxesArr = nil
+	i.InvoiceData.Taxes = make(map[string]tax)
 }
 
 // Clear clears all the items in the invoice
@@ -149,7 +149,7 @@ func (i *Invoice) SetDescription(desc string) {
 		panic("provide the description argument")
 	}
 
-	i.InvoiceIn.Description = desc
+	i.InvoiceData.Description = desc
 }
 
 // SetTotalAmount the total amount on the invoice
@@ -162,7 +162,7 @@ func (i *Invoice) SetTotalAmount(amt float32) {
 		panic("provide the totalAmount argument")
 	}
 
-	i.InvoiceIn.TotalAmount = amt
+	i.InvoiceData.TotalAmount = amt
 }
 
 // SetCustomData the total amount on the invoice
@@ -182,32 +182,32 @@ func (i *Invoice) SetCustomData(key string, val interface{}) {
 // PrepareForRequest prepares the invoice for request
 // This is called before the request to mpower invoice is made to set the items and taxes into a json format
 func (i *Invoice) PrepareForRequest() {
-	i.InvoiceIn.Items = make(map[string]item)
-	i.InvoiceIn.Taxes = make(map[string]tax)
+	i.InvoiceData.Items = make(map[string]item)
+	i.InvoiceData.Taxes = make(map[string]tax)
 
 	// Check the section on `concurrrency` http://blog.golang.org/go-maps-in-action
 	// http://golang.org/doc/faq#atomic_maps
 	i.Lock()
 
-	for ix, value := range i.InvoiceIn.ItemsArr {
+	for ix, value := range i.InvoiceData.ItemsArr {
 		itemName := fmt.Sprintf("item_%d", ix)
-		i.InvoiceIn.Items[itemName] = item{}
-		tempItem := i.InvoiceIn.Items[itemName]
+		i.InvoiceData.Items[itemName] = item{}
+		tempItem := i.InvoiceData.Items[itemName]
 		tempItem.Name = value.Name
 		tempItem.Quantity = value.Quantity
 		tempItem.UnitPrice = value.UnitPrice
 		tempItem.TotalPrice = value.TotalPrice
 		tempItem.Description = value.Description
-		i.InvoiceIn.Items[itemName] = tempItem
+		i.InvoiceData.Items[itemName] = tempItem
 	}
 
-	for ix, value := range i.InvoiceIn.TaxesArr {
+	for ix, value := range i.InvoiceData.TaxesArr {
 		taxName := fmt.Sprintf("tax_%d", ix)
-		i.InvoiceIn.Taxes[taxName] = tax{}
-		tempTax := i.InvoiceIn.Taxes[taxName]
+		i.InvoiceData.Taxes[taxName] = tax{}
+		tempTax := i.InvoiceData.Taxes[taxName]
 		tempTax.Name = value.Name
 		tempTax.Amount = value.Amount
-		i.InvoiceIn.Taxes[taxName] = tempTax
+		i.InvoiceData.Taxes[taxName] = tempTax
 	}
 
 	i.Unlock()

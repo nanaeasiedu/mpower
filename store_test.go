@@ -12,21 +12,15 @@ type SuiteTestStore struct {
 }
 
 func (s *SuiteTestStore) SetupSuite() {
-	_, s.mpowerStore = NewStore(map[string]string{
-		"name":          "Awesome Store",
-		"tagline":       "Easy shopping",
-		"phoneNumber":   "0272271893",
-		"postalAddress": "P.0. Box MP555, Accra",
-		"logoURL":       "http://www.awesomestore.com.gh/logo.png",
-	})
+	s.mpowerStore = NewStore("Awesome Store", "Easy shopping", "0272271893", "P.0. Box MP555, Accra", "http://www.awesomestore.com.gh/logo.png")
 }
 
 func (s *SuiteTestStore) TestNewSetup() {
-	assert.Equal(s.T(), "Awesome Store", s.mpowerStore.Get("Name"), "Master Keys are equal")
-	assert.Equal(s.T(), "Easy shopping", s.mpowerStore.Get("Tagline"), "Private Keys Keys are equal")
-	assert.Equal(s.T(), "0272271893", s.mpowerStore.Get("PhoneNumber"), "Public Keys are equal")
-	assert.Equal(s.T(), "P.0. Box MP555, Accra", s.mpowerStore.Get("PostalAddress"), "Tokens are equal")
-	assert.Equal(s.T(), "http://www.awesomestore.com.gh/logo.png", s.mpowerStore.Get("LogoURL"), "Urls are correct")
+	assert.Equal(s.T(), "Awesome Store", s.mpowerStore.Name, "Master Keys are equal")
+	assert.Equal(s.T(), "Easy shopping", s.mpowerStore.Tagline, "Private Keys Keys are equal")
+	assert.Equal(s.T(), "0272271893", s.mpowerStore.PhoneNumber, "Public Keys are equal")
+	assert.Equal(s.T(), "P.0. Box MP555, Accra", s.mpowerStore.PostalAddress, "Tokens are equal")
+	assert.Equal(s.T(), "http://www.awesomestore.com.gh/logo.png", s.mpowerStore.LogoURL, "Urls are correct")
 }
 
 func TestStoreSRunSuite(t *testing.T) {

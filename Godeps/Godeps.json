@@ -3,9 +3,9 @@
 	"GoVersion": "go1.4.2",
 	"Deps": [
 		{
-			"ImportPath": "github.com/parnurzeal/gorequest",
-			"Comment": "v0.2.5-3-g19eed7d",
-			"Rev": "19eed7daff5653f5f753b3474f194b8f37c70463"
+			"ImportPath": "github.com/jmcvetta/napping",
+			"Comment": "v1-17-g24cd6fd",
+			"Rev": "24cd6fd789202bd59699d1bd74f390c598d48c4e"
 		},
 		{
 			"ImportPath": "github.com/stretchr/testify/assert",
@@ -21,10 +21,6 @@
 			"ImportPath": "github.com/stretchr/testify/suite",
 			"Comment": "v1.0-17-g089c718",
 			"Rev": "089c7181b8c728499929ff09b62d3fdd8df8adff"
-		},
-		{
-			"ImportPath": "golang.org/x/net/publicsuffix",
-			"Rev": "d9558e5c97f85372afee28cf2b6059d7d3818919"
 		}
 	]
 }

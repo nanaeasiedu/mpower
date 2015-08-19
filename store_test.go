@@ -23,7 +23,7 @@ func (s *SuiteTestStore) TestNewSetup() {
 	assert.Equal(s.T(), "http://www.awesomestore.com.gh/logo.png", s.mpowerStore.LogoURL, "Urls are correct")
 }
 
-func TestStoreSRunSuite(t *testing.T) {
+func TestStoreRunSuite(t *testing.T) {
 	setupTester := new(SuiteTestStore)
 	suite.Run(t, setupTester)
 }

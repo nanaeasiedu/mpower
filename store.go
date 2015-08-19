@@ -2,7 +2,7 @@ package mpower
 
 // The Store holds the store information and ised to define the store data for mpower transaction
 type Store struct {
-	Name          string `json:",omitemptyname"`
+	Name          string `json:"name,omitempty"`
 	Tagline       string `json:"tagline,omitempty"`
 	PhoneNumber   string `json:"phone,omitempty"`
 	PostalAddress string `json:"postal_address,omitempty"`

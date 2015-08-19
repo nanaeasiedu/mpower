@@ -31,6 +31,7 @@ type CheckoutInvoiceStatus struct {
 
 // Create - creates a new invoice on mpower
 func (c *CheckoutInvoice) Create() (*CheckoutInvoiceResponse, *napping.Response, error) {
+	c.PrepareForRequest()
 	payload := &CheckoutInvoiceRequest{Invoice: c.Invoice}
 	responseBody := &CheckoutInvoiceResponse{}
 
@@ -44,15 +45,15 @@ func (c *CheckoutInvoice) Create() (*CheckoutInvoiceResponse, *napping.Response,
 }
 
 // Confirm - This confirms the token status
-func (c *CheckoutInvoice) Confirm(token string) (string, error) {
+func (c *CheckoutInvoice) Confirm(token string) (*CheckoutInvoiceStatus, *napping.Response, error) {
 	responseBody := &CheckoutInvoiceStatus{}
-	response, err := c.mpower.NewRequest("GET", c.baseURL+"/confirm", nil, responseBody, nil)
+	response, err := c.mpower.NewRequest("GET", c.baseURL+"/confirm/"+token, nil, responseBody, nil)
 
 	if err != nil {
-		return "", err
+		return nil, response, err
 	}
 
-	return response.RawText(), nil
+	return responseBody, response, nil
 }
 
 // NewCheckoutInvoice - create a new checkout instance

@@ -11,13 +11,15 @@ type OnsiteInvoice struct {
 	mpower  *MPower
 }
 
+type OnsitePaymentRequestData struct {
+	Alias string `json:"account_alias"`
+}
+
 // OnsiteInvoiceRequest
 // This struct holds all the data with respect to onsite request
 type OnsiteInvoiceRequest struct {
-	Invoice                  `json:"invoice_data"`
-	OnsitePaymentRequestData struct {
-		Alias string `json:"account_alias"`
-	} `json:"opr_data"`
+	Invoice `json:"invoice_data"`
+	OPRData OnsitePaymentRequestData `json:"opr_data"`
 }
 
 // OnsiteInvoiceResponse is the response you get back from creating an onsite invoice
@@ -54,9 +56,8 @@ type OnsitePaymentRequestChargeResponse struct {
 func (on *OnsiteInvoice) Create(name string) (*OnsiteInvoiceResponse, *napping.Response, error) {
 	on.PrepareForRequest()
 
-	requestBody := &OnsiteInvoiceRequest{}
-	requestBody.Invoice = on.Invoice
-	requestBody.OnsitePaymentRequestData.Alias = name
+	requestBody := &OnsiteInvoiceRequest{Invoice: on.Invoice}
+	requestBody.OPRData = OnsitePaymentRequestData{Alias: name}
 
 	responseBody := &OnsiteInvoiceResponse{}
 
@@ -92,5 +93,6 @@ func (on *OnsiteInvoice) Charge(onsitePaymentRequestToken, customerConfirmToken 
 func NewOnsiteInvoice(mp *MPower) *OnsiteInvoice {
 	onsiteInvoice := &OnsiteInvoice{Invoice: Invoice{Setup: mp.setup, Store: *mp.store}}
 	onsiteInvoice.baseURL = mp.baseURL + "/opr"
+	onsiteInvoice.mpower = mp
 	return onsiteInvoice
 }

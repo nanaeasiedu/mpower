@@ -53,8 +53,9 @@ func (mp *MPower) NewRequest(method, url string, payload, result interface{}, he
 // NewMPower creates a new MPower
 func NewMPower(setup *Setup, store *Store, mode string) *MPower {
 	mp := &MPower{
-		setup: setup,
-		store: store,
+		setup:   setup,
+		store:   store,
+		Session: &napping.Session{},
 	}
 
 	if mode == "live" {
@@ -63,6 +64,7 @@ func NewMPower(setup *Setup, store *Store, mode string) *MPower {
 		mp.baseURL = baseURLTest
 	}
 
+	mp.Session.Header = &http.Header{}
 	for key, val := range setup.Headers {
 		mp.Session.Header.Add(key, val)
 	}

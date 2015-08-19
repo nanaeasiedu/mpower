@@ -21,6 +21,7 @@ type DirectMobileRequest struct {
 	Amount         string `json:"amount"`
 }
 
+// DirectMobileResponse is the response from a direct mobile charge request
 type DirectMobileResponse struct {
 	Response
 	Token               string `json:"token"`
@@ -28,6 +29,7 @@ type DirectMobileResponse struct {
 	MobileInvoiceNumber string `json:"mobile_invoice_no"`
 }
 
+// DirectMobileStatusResponse is the status of a direct mobile transaction
 type DirectMobileStatusResponse struct {
 	Response
 	TXStatus            string `json:"tx_status"`
@@ -48,7 +50,7 @@ func (d *DirectMobile) directMobileLiveHeader() *http.Header {
 // Charge charges customers' mobile money money wallets directly on your site or application
 //
 // Example.
-//		resp, err := directMobileInstance.Charge("Eugene", "ngene84@gmail.com", "0272271893", "MTN", "20")
+//		resp, err := directMobileInstance.Charge("Eugene", "ngene84@gmail.com", "0272271893", "Awesome Shopping", "MTN", "20")
 func (d *DirectMobile) Charge(name, email, phone, merchant, wallet, amount string) (*DirectMobileResponse, *napping.Response, error) {
 	payload := &DirectMobileRequest{name, email, phone, merchant, wallet, amount}
 	responseBody := &DirectMobileResponse{}
@@ -62,6 +64,7 @@ func (d *DirectMobile) Charge(name, email, phone, merchant, wallet, amount strin
 	return responseBody, response, nil
 }
 
+// Status checks the status of a direct mobile transaction
 func (d *DirectMobile) Status(token string) (*DirectMobileStatusResponse, *napping.Response, error) {
 	payload := &struct {
 		token string

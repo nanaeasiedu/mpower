@@ -4,6 +4,7 @@ import (
 	"github.com/jmcvetta/napping"
 )
 
+// OnsiteInvoice allows you to create an onsite invoice as per mpower docs
 type OnsiteInvoice struct {
 	Invoice
 	baseURL string
@@ -11,7 +12,6 @@ type OnsiteInvoice struct {
 }
 
 // OnsiteInvoiceRequest
-// The onsite definition as defined by mpower documentation
 // This struct holds all the data with respect to onsite request
 type OnsiteInvoiceRequest struct {
 	Invoice                  `json:"invoice_data"`
@@ -20,17 +20,20 @@ type OnsiteInvoiceRequest struct {
 	} `json:"opr_data"`
 }
 
+// OnsiteInvoiceResponse is the response you get back from creating an onsite invoice
 type OnsiteInvoiceResponse struct {
 	Response
 	Token        string `json:"token"`
 	InvoiceToken string `json:"invoice_token"`
 }
 
+// OnsitePaymentRequestCharge charges a customer
 type OnsitePaymentRequestCharge struct {
 	Token        string `json:"token"`
 	ConfirmToken string `json:"confirm_token"`
 }
 
+// OnsitePaymentRequestChargeResponse is the response from an onsite charge request
 type OnsitePaymentRequestChargeResponse struct {
 	InvoiceData struct {
 		ReceiptURL string `json:"receipt_url"`

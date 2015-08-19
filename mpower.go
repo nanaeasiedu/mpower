@@ -27,6 +27,7 @@ type MPower struct {
 	Session *napping.Session
 }
 
+// NewRequest is the method provided for all the api services to used
 func (mp *MPower) NewRequest(method, url string, payload, result interface{}, header *http.Header) (resp *napping.Response, err error) {
 	request := &napping.Request{
 		Method:  method,

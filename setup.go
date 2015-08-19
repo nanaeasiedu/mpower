@@ -5,7 +5,7 @@ const (
 	baseTest = "https://app.mpowerpayments.com/sandbox-api/v1"
 )
 
-// The Setup as defined by mpower docs with the exception of the BaseURL
+// Setup as defined by mpower docs with the exception of the BaseURL
 type Setup struct {
 	MasterKey   string
 	PrivateKey  string
@@ -30,6 +30,7 @@ func NewSetup(masterKey, privateKey, publicKey, token string) *Setup {
 	return setup
 }
 
+// NewSetupFromEnv creates a setup from your environment keys
 func NewSetupFromEnv() *Setup {
 	setup := &Setup{
 		MasterKey:  env("MP-Master-Key"),

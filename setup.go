@@ -33,10 +33,10 @@ func NewSetup(masterKey, privateKey, publicKey, token string) *Setup {
 // NewSetupFromEnv creates a setup from your environment keys
 func NewSetupFromEnv() *Setup {
 	setup := &Setup{
-		MasterKey:  env("MP-Master-Key"),
-		PrivateKey: env("MP-Private-Key"),
-		PublicKey:  env("MP-Public-Key"),
-		Token:      env("MP-Token"),
+		MasterKey:  env("MP_Master_Key"),
+		PrivateKey: env("MP_Private_Key"),
+		PublicKey:  env("MP_Public_Key"),
+		Token:      env("MP_Token"),
 	}
 
 	setup.setupHeaders()

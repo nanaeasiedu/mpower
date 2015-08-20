@@ -3,10 +3,3 @@ language: go
 go:
   - 1.4.2
   - tip
-
-env:
-  global:
-    - MP-Master-Key=55647970-22e1-4e7e-8fb4-56eca2b3b006
-    - MP-Private-Key=test_private_cdxT8jWmeSUBvUD7SEUYzEd6e7Q
-    - MP-Public-Key=test_public_PPIHCFmCUQNpon-0UwAtpvuP9L8
-    - MP-Token=8a595ea116c904da8ed8

@@ -24,6 +24,7 @@ type MPower struct {
 	setup   *Setup
 	store   *Store
 	baseURL string
+	mode    string
 	Session *napping.Session
 }
 
@@ -55,6 +56,7 @@ func NewMPower(setup *Setup, store *Store, mode string) *MPower {
 	mp := &MPower{
 		setup:   setup,
 		store:   store,
+		mode:    mode,
 		Session: &napping.Session{},
 	}
 

@@ -52,6 +52,9 @@ func (d *DirectMobile) directMobileLiveHeader() *http.Header {
 // Example.
 //		resp, err := directMobileInstance.Charge("Eugene", "ngene84@gmail.com", "0272271893", "Awesome Shopping", "MTN", "20")
 func (d *DirectMobile) Charge(name, email, phone, merchant, wallet, amount string) (*DirectMobileResponse, *napping.Response, error) {
+	if d.mpower.mode == "test" {
+		panic("Cannot make a direct mobile requset in `test` mode")
+	}
 	payload := &DirectMobileRequest{name, email, phone, merchant, wallet, amount}
 	responseBody := &DirectMobileResponse{}
 
@@ -66,6 +69,9 @@ func (d *DirectMobile) Charge(name, email, phone, merchant, wallet, amount strin
 
 // Status checks the status of a direct mobile transaction
 func (d *DirectMobile) Status(token string) (*DirectMobileStatusResponse, *napping.Response, error) {
+	if d.mpower.mode == "test" {
+		panic("Cannot make a direct mobile requset in `test` mode")
+	}
 	payload := &struct {
 		token string
 	}{token}

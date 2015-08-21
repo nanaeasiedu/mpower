@@ -1,8 +1,8 @@
-## MPOWERGO
+## MPOWER - GOLANG LIBRARY FOR MPOWER API
 
-[![Build Status](https://secure.travis-ci.org/ngenerio/mpowergo.png?branch=master)](https://travis-ci.org/ngenerio/mpowergo)
+[![Build Status](https://secure.travis-ci.org/ngenerio/mpower.png?branch=master)](https://travis-ci.org/ngenerio/mpower)
 
-[![GoDoc](https://godoc.org/github.com/ngenerio/mpowergo?status.svg)](https://godoc.org/github.com/ngenerio/mpowergo)
+[![GoDoc](https://godoc.org/github.com/ngenerio/mpower?status.svg)](https://godoc.org/github.com/ngenerio/mpower)
 
 This a go implementation library that interfaces with the mpower http api.
 
@@ -11,7 +11,7 @@ Built on the MPower Payments [`HTTP API (beta)`](http://mpowerpayments.com/devel
 ### Installation
 
 ```bash
-$ go get github.com/ngenerio/mpowergo
+$ go get github.com/ngenerio/mpower
 ```
 
 ### Documentation
@@ -68,4 +68,4 @@ Set the total amount on the invoice
 checkout.SetTotalAmount(80.00)
 ```
 For more docs, read up:
-[Mpowergo docs](https://godoc.org/github.com/ngenerio/mpowergo)
+[Mpower docs](https://godoc.org/github.com/ngenerio/mpower)

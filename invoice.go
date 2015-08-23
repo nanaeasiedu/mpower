@@ -25,13 +25,18 @@ type tax struct {
 // Invoice definition as specified by mpower docs
 // It holds all the data related to the invoice
 type invoice struct {
-	ItemsArr    []item            `json:"-"`
-	TaxesArr    []tax             `json:"-"`
-	Items       map[string]item   `json:"items"`
-	Taxes       map[string]tax    `json:"taxes,omitempty"`
-	TotalAmount float32           `json:"total_amount"`
-	Description string            `json:"description"`
-	Actions     map[string]string `json:"actions,omitempty"`
+	ItemsArr    []item          `json:"-"`
+	TaxesArr    []tax           `json:"-"`
+	Items       map[string]item `json:"items"`
+	Taxes       map[string]tax  `json:"taxes,omitempty"`
+	TotalAmount float32         `json:"total_amount"`
+	Description string          `json:"description"`
+}
+
+// Actions represent the action urls of the invoice
+type Actions struct {
+	CancelURL string `json:"cancel_url,omitempty"`
+	ReturnURL string `json:"return_url,omitempty"`
 }
 
 // Invoice definition
@@ -43,6 +48,7 @@ type Invoice struct {
 	Store       Store                  `json:"store"`
 	InvoiceData invoice                `json:"invoice"`
 	CustomData  map[string]interface{} `json:"custom_data,omitempty"`
+	Actions     Actions                `json:"actions,omitempty"`
 }
 
 // AddItem add an `item - struct` to the items in the invoice
@@ -211,4 +217,14 @@ func (i *Invoice) PrepareForRequest() {
 	}
 
 	i.Unlock()
+}
+
+// SetURLS sets the cancel url of the invoice
+func (i *Invoice) SetURLS(cancelURL, returnURL string) {
+	actions := Actions{
+		CancelURL: cancelURL,
+		ReturnURL: returnURL,
+	}
+
+	i.Actions = actions
 }

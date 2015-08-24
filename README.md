@@ -18,14 +18,15 @@ $ go get github.com/ngenerio/mpower
 
 Create a new store instance to use in the checkout or onsite invoice
 
-```go
-mpowerStore := NewStore("Awesome Store", "Easy shopping", "0272271893", "P.0. Box MP555, Accra", "http://www.awesomestore.com.gh/logo.png")
+```gO
+mpowerStore := NewStore("Awesome Store")
 ```
 
 Create a new setup instance to use in the checkout or onsite invoice
 
 ```go
-mpowerSetup := NewSetup("43434-54545-45454-545432", "test_private_auhidaudvbirbyyrieoib", "test_public_iopjasdioppdadipjoasd", "ioapdojdifouw8h")
+// Get your keys from MPower Integration Setup
+mpowerSetup := NewSetup(MASTER_KEY, PRIVATE_KEY , PUBLIC_KEY, TOKEN)
 ```
 
 #### Checkout and Onsite Invoice
@@ -67,5 +68,50 @@ Set the total amount on the invoice
 ```go
 checkout.SetTotalAmount(80.00)
 ```
+
+#### Creating an invoice
+
+This sample code shows how to create an mpower invoice after adding some items to your `checkout` or `onsite` invoice
+
+```go
+//`response` is of type [`napping.Response`](http://godoc.org/github.com/jmcvetta/napping#Response)
+responseBody, response, err := checkout.Create()
+
+if err != nil {
+    // handle the error
+}
+// where `responseBody.Token` is the token of the created invoice
+fmt.Println(responseBody.Token)
+```
+
+#### Confirming the status of an invoice
+
+```go
+// `TOKEN` is the token of the invoice created
+responseBody, response, err := checkout.Confirm(TOKEN)
+
+if err != nil {
+    // handle the error
+}
+
+// `response.Status` could either be `pending`, `cancelled` or `completed`
+fmt.Println(responseBody.Status)
+```
+
+#### Charging the mpower customer with onsite payment request
+
+```go
+// `TOKEN` is the onsite token of the invoice created and the `CUSTOMER_TOKEN` is from the customer
+responseBody, response, err := onsite.Charge(TOKEN, CUSTOMER_TOKEN)
+```
+
+#### Direct Mobile
+
+Docs coming up soon
+
+#### Direct Pay
+
+Docs coming up soon
+
 For more docs, read up:
 [Mpower docs](https://godoc.org/github.com/ngenerio/mpower)

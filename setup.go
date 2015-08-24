@@ -7,13 +7,12 @@ const (
 
 // Setup as defined by mpower docs with the exception of the BaseURL
 type Setup struct {
-	MasterKey   string
-	PrivateKey  string
-	PublicKey   string
-	Token       string
-	ContentType string
-	Headers     map[string]string
-	BaseURL     string
+	MasterKey  string
+	PrivateKey string
+	PublicKey  string
+	Token      string
+	Headers    map[string]string
+	BaseURL    string
 }
 
 // NewSetup - returns a new setup object

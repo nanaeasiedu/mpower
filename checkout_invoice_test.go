@@ -14,7 +14,7 @@ type SuiteTestCheckoutInvoice struct {
 }
 
 func (s *SuiteTestCheckoutInvoice) SetupSuite() {
-	store := NewStore("Awesome Store", "Easy shopping", "0272271893", "P.0. Box MP555, Accra", "http://www.awesomestore.com.gh/logo.png")
+	store := NewStore("Awesome Store")
 	setup := NewSetupFromEnv()
 
 	s.mpower = NewMPower(setup, store, "test")

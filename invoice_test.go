@@ -12,7 +12,7 @@ type InvoiceSuiteTest struct {
 }
 
 func (s *InvoiceSuiteTest) SetupSuite() {
-	newStore := NewStore("Awesome Store", "Easy shopping", "0272271893", "P.0. Box MP555, Accra", "http://www.awesomestore.com.gh/logo.png")
+	newStore := NewStore("Awesome Store")
 
 	newSetup := NewSetup("43434-54545-45454-545432", "test_private_auhidaudvbirbyyrieoib", "test_public_iopjasdioppdadipjoasd", "ioapdojdifouw8h")
 

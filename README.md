@@ -18,7 +18,7 @@ $ go get github.com/ngenerio/mpower
 
 Create a new store instance to use in the checkout or onsite invoice
 
-```gO
+```go
 mpowerStore := NewStore("Awesome Store")
 ```
 

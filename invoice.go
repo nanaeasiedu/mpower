@@ -8,18 +8,18 @@ import (
 // Item definition as specified by mpower docs
 // It holds the data of an item
 type item struct {
-	Name        string  `json:"name"`
-	Quantity    int     `json:"quantity"`
-	UnitPrice   float32 `json:"unit_price"`
-	TotalPrice  float32 `json:"total_price"`
-	Description string  `json:"description"`
+	Name        string  `json:"name,omitempty"`
+	Quantity    int     `json:"quantity,omitempty"`
+	UnitPrice   float32 `json:"unit_price,omitempty"`
+	TotalPrice  float32 `json:"total_price,omitempty"`
+	Description string  `json:"description,omitempty"`
 }
 
 // Tax definition as specified by mpower docs
 // It holds the tax data
 type tax struct {
-	Name   string  `json:"name"`
-	Amount float32 `json:"amount"`
+	Name   string  `json:"name,omitempty"`
+	Amount float32 `json:"amount,omitempty"`
 }
 
 // Invoice definition as specified by mpower docs
@@ -27,7 +27,7 @@ type tax struct {
 type invoice struct {
 	ItemsArr    []item          `json:"-"`
 	TaxesArr    []tax           `json:"-"`
-	Items       map[string]item `json:"items"`
+	Items       map[string]item `json:"items,omitempty"`
 	Taxes       map[string]tax  `json:"taxes,omitempty"`
 	TotalAmount float32         `json:"total_amount"`
 	Description string          `json:"description"`
